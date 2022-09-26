@@ -16,6 +16,7 @@ NAME_SPACE = NO_NS
 COMMON_SRCS = common/main.cpp
 COMMON_OBJS = $(COMMON_SRCS:.cpp=.o)
 COMMON_HEADERS = common/common.hpp
+INCLUDES = -Icommon -Iiterator
 HEADERS = 
 
 # Rules
@@ -28,7 +29,7 @@ $(NAME): $(HEADERS) $(COMMON_HEADERS) $(COMMON_OBJS)
 
 %.o:%.cpp $(COMMON_HEADERS) 
 	@echo $(C_BLUE)compiling $(C_RED)\($<\) $(C_BLUE)using namespace $(NAME_SPACE) $(C_RESET)
-	@$(CXX) $(CXXFLAGS) -DUSING_$(NAME_SPACE) -c $< -o $@ 
+	@$(CXX) $(CXXFLAGS) $(INCLUDES) -DUSING_$(NAME_SPACE) -c $< -o $@ 
 
 clean:
 	@echo $(C_RED)removing object files $(C_RESET)
