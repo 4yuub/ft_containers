@@ -1,0 +1,6 @@
+# bainary files
+*.o
+test
+
+#vscode config
+.vscode
