@@ -1,5 +1,6 @@
 #include <iostream>
 #include "common.hpp"
+#include "tests.hpp"
 
 #if defined(USING_STD)
 # define NS std
@@ -12,7 +13,7 @@ int main(void) {
     std::cerr << "Error: undefined namespace" << std::endl;
     return 1;
 #else
-    // testing goes here
+    test_iterator();
     return 0;
 #endif
 }
