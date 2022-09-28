@@ -1,10 +1,11 @@
 #include <iostream>
-#include "iterator.hpp"
 
 #if defined(USING_STD)
 # define NS std
+#include <iterator>
 #elif defined(USING_FT)
 # define NS ft
+#include "iterator.hpp"
 #endif
 
 #ifdef NS
