@@ -14,6 +14,7 @@ int main(void) {
     return 1;
 #else
     test_iterator();
+    test_type_traits();
     return 0;
 #endif
 }

@@ -13,11 +13,11 @@ RM = rm -f
 NAME = test
 NAME_SPACE = NO_NS
 
-COMMON_SRCS = common/main.cpp common/iterator_test.cpp
+COMMON_SRCS = common/main.cpp common/iterator_test.cpp common/type_traits.cpp
 COMMON_OBJS = $(COMMON_SRCS:.cpp=.o)
 COMMON_HEADERS = common/common.hpp common/tests.hpp
-INCLUDES = -Icommon -Iiterator
-HEADERS = iterator/iterator.hpp iterator/iterator_traits.hpp
+INCLUDES = -Icommon -Iiterator -Itype_traits
+HEADERS = iterator/iterator.hpp iterator/iterator_traits.hpp type_traits/type_traits.hpp
 
 # Rules
 all: $(NAME)
