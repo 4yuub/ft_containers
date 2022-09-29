@@ -5,53 +5,53 @@
 namespace ft {
     // equal
     template <class InputIterator1, class InputIterator2>
-    bool equal(InputIterator1 begin1, InputIterator1 end1, InputIterator2 begin2) {
-        while (begin1 != end1) {
-            if (!(*begin1 == *begin2))
+    bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2) {
+        while (first1 != last1) {
+            if (!(*first1 == *first2))
                 return false;
-            begin1++, begin2++;
+            first1++, first2++;
         }
         return true;
     }
     
     template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-    bool equal(InputIterator1 begin1, InputIterator1 end1, InputIterator2 begin2, BinaryPredicate pred) {
-        while (begin1 != end1) {
-            if (!pred(*begin1, *begin2))
+    bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate pred) {
+        while (first1 != last1) {
+            if (!pred(*first1, *first2))
                 return false;
-            begin1++, begin2++;
+            first1++, first2++;
         }
         return true;
     }
 
     // lexicographical compare
     template<class InputIterator1, class InputIterator2>
-    bool lexicographical_compare(InputIterator1 begin1, InputIterator1 end1, 
-                                 InputIterator2 begin2, InputIterator2 end2)
+    bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1, 
+                                 InputIterator2 first2, InputIterator2 last2)
     {
-        while (begin1 != end1) {
-            if (begin2 == end2 || *begin2 < *begin1)
+        while (first1 != last1) {
+            if (first2 == last2 || *first2 < *first1)
                 return false;
-            if (*begin1 < *begin2)
+            if (*first1 < *first2)
                 return true;
-            begin1++, begin2++;
+            first1++, first2++;
         }
-        return begin2 != end2;
+        return first2 != last2;
     }
     
     template<class InputIterator1, class InputIterator2, class Compare>
-    bool lexicographical_compare(InputIterator1 begin1, InputIterator1 end1, 
-                                 InputIterator2 begin2, InputIterator2 end2,
+    bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1, 
+                                 InputIterator2 first2, InputIterator2 last2,
                                  Compare comp)
     {
-        while (begin1 != end1) {
-            if (begin2 == end2 || comp(*begin2, *begin1))
+        while (first1 != last1) {
+            if (first2 == last2 || comp(*first2, *first1))
                 return false;
-            if (comp(*begin1, *begin2))
+            if (comp(*first1, *first2))
                 return true;
-            begin1++, begin2++;
+            first1++, first2++;
         }
-        return begin2 != end2;
+        return first2 != last2;
     }
 } // namespace ft
 
