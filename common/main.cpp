@@ -15,6 +15,8 @@ int main(void) {
 #else
     test_iterator();
     test_type_traits();
+    lexicographical_compare_test();
+    equal_test();
     return 0;
 #endif
 }
