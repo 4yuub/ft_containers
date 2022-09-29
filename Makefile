@@ -14,7 +14,7 @@ NAME = test
 NAME_SPACE = NO_NS
 
 COMMON_SRCS = common/main.cpp common/iterator_test.cpp common/type_traits.cpp \
-			  common/algorithm_test.cpp
+			  common/algorithm_test.cpp common/pair_test.cpp
 COMMON_OBJS = $(COMMON_SRCS:.cpp=.o)
 COMMON_HEADERS = common/common.hpp common/tests.hpp
 INCLUDES = -Icommon -Iiterator -Itype_traits -Ialgorithm -Iutility

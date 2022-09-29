@@ -17,6 +17,7 @@ int main(void) {
     test_type_traits();
     lexicographical_compare_test();
     equal_test();
+    pair_test();
     return 0;
 #endif
 }
