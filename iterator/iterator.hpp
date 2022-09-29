@@ -103,6 +103,34 @@ namespace ft {
                 return base()[-n-1];
             }
     };
+
+    // distance
+    namespace detail {
+        template <class It>
+        typename std::iterator_traits<It>::difference_type
+        do_distance(It first, It last, input_iterator_tag) {
+           typename std::iterator_traits<It>::difference_type dist = 0;
+           while (first != last) {
+               first++;
+               dist++;
+           }
+           return dist;
+        }
+        
+        template <class It>
+        typename std::iterator_traits<It>::difference_type
+        do_distance(It first, It last, random_access_iterator_tag) {
+           return last - first;
+        }
+
+    } // namespace detail
+    
+    template <class It>
+    typename iterator_traits<It>::difference_type
+    distance(It first, It last) {
+        return detail::do_distance(first, last, \
+                                typename iterator_traits<It>::iterator_category());
+    }
 } // namespace ft
 
 #endif
