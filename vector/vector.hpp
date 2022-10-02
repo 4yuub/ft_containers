@@ -123,7 +123,7 @@ namespace ft {
 
             void resize(size_type n, value_type val = value_type()) {
                 if (n > _capacity) {
-                    _reAlloc(Max(_capacity * 2, n)); // Todo
+                    _reAlloc(Max(_capacity * 2, n));
                 }
                 for (int i = n; i < _size; i++) // if n < size
                     _alloc.destroy(&arr[i]);
@@ -187,6 +187,43 @@ namespace ft {
             
             const value_type* data() const {
                 return _arr;
+            }
+
+            // modifiers
+            template <class InputIterator> 
+            void assign(InputIterator first, InputIterator last) {
+                difference_type new_size = distance(first, last);
+                if (new_size > _capacity)
+                    _reAlloc(new_size);
+                for (int i = new_size; i < _size; i++) // if new_size < size
+                    _alloc.destroy(&arr[i]);
+                for (int i = 0; i < new_size; i++)
+                    _alloc.construct(&arr[i], *(first++));
+                _size = new_size;
+            }
+
+            void assign(size_type n, const value_type& val) {
+                if (n > _capacity)
+                    _reAlloc(n);
+                for (int i = n; i < _size; i++) // if n < size
+                    _alloc.destroy(&arr[i]);
+                for (int i = 0; i < n; i++)
+                    _alloc.construct(&arr[i], val);
+                _size = n;
+            }
+
+            void push_back(const value_type& val) {
+                if (_size >= _capacity)
+                    _reAlloc(Max(_capacity * 2, 1)); // one if current _capacity is 0
+                _alloc.construct(&_arr[_size], val);
+                _size++;
+            }
+
+            void pop_back() {
+                if (empty())
+                    return ;
+                _alloc.destory(&_arr[_size]);
+                _size--;
             }
     };
 } // namespace ft
