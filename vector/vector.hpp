@@ -14,7 +14,7 @@ namespace ft {
             size_t _capacity;
             Alloc  _alloc;
 
-            void _reAlloc(size_type new_capacity) {
+            void _reAlloc(typename Alloc::size_type new_capacity) {
                 T *new_arr = _alloc.allocate(new_capacity);
 
                 for (int i = 0; i < _size && i < new_capacity; i++) {
@@ -27,16 +27,16 @@ namespace ft {
             }
 
         public:
-            typedef T                                          value_type;
-            typedef Alloc                                      allocator_type;
-            typedef typename allocator_type::reference         reference;
-            typedef typename allocator_type::const_reference   const_reference;
-            typedef VectorIterator<value_type>                 iterator;
-            typedef VectorIterator<const value_type>           const_iterator;
-            typedef reverse_iterator<iterator>                 reverse_iterator;
-            typedef reverse_iterator<const_iterator>           const_reverse_iterator;
-            typedef iterator_traits<iterator>::difference_type difference_type;
-            typedef typename allocator_type::size_type         size_type;
+            typedef T                                                   value_type;
+            typedef Alloc                                               allocator_type;
+            typedef typename allocator_type::reference                  reference;
+            typedef typename allocator_type::const_reference            const_reference;
+            typedef VectorIterator<value_type>                          iterator;
+            typedef VectorIterator<const value_type>                    const_iterator;
+            typedef reverse_iterator<const_iterator>                    const_reverse_iterator;
+            typedef reverse_iterator<iterator>                          reverse_iterator;
+            typedef typename iterator_traits<iterator>::difference_type difference_type;
+            typedef typename allocator_type::size_type                  size_type;
 
             // constructors
             vector(const allocator_type& alloc = allocator_type()) {
@@ -97,7 +97,7 @@ namespace ft {
                     for (int i = 0; i < rhs._size; i++)
                         _arr[i] = rhs._arr[i];
                     for (int i = rhs._size; i < _size; i++)
-                        _alloc.destroy(&arr[i]);
+                        _alloc.destroy(&_arr[i]);
                     return *this;
                 }
                 for (int i = 0; i < _size; i++)
@@ -160,9 +160,9 @@ namespace ft {
                     _reAlloc(Max(_capacity * 2, n));
                 }
                 for (int i = n; i < _size; i++) // if n < size
-                    _alloc.destroy(&arr[i]);
+                    _alloc.destroy(&_arr[i]);
                 for (int i = _size; i < n; i++) // if n > size
-                    _alloc.construct(&arr[i], val);
+                    _alloc.construct(&_arr[i], val);
                 _size = n;
             }
 
@@ -189,12 +189,12 @@ namespace ft {
                 return _arr[n];
             }
             
-            reference operator at (size_type n) {
+            reference at(size_type n) {
                 if (n >= _size) throw std::out_of_range("vector");
                 return _arr[n];
             }
             
-            const_reference operator at (size_type n) const {
+            const_reference at(size_type n) const {
                 if (n >= _size) throw std::out_of_range("vector");
                 return _arr[n];
             }
@@ -208,11 +208,11 @@ namespace ft {
             }
 
             reference back() {
-                return _arr[size - 1];
+                return _arr[_size - 1];
             }
             
             const_reference back() const {
-                return _arr[size - 1];
+                return _arr[_size - 1];
             }
 
             value_type* data() {
@@ -230,9 +230,9 @@ namespace ft {
                 if (new_size > _capacity)
                     _reAlloc(new_size);
                 for (int i = new_size; i < _size; i++) // if new_size < size
-                    _alloc.destroy(&arr[i]);
+                    _alloc.destroy(&_arr[i]);
                 for (int i = 0; i < new_size; i++)
-                    _alloc.construct(&arr[i], *(first++));
+                    _alloc.construct(&_arr[i], *(first++));
                 _size = new_size;
             }
 
@@ -240,9 +240,9 @@ namespace ft {
                 if (n > _capacity)
                     _reAlloc(n);
                 for (int i = n; i < _size; i++) // if n < size
-                    _alloc.destroy(&arr[i]);
+                    _alloc.destroy(&_arr[i]);
                 for (int i = 0; i < n; i++)
-                    _alloc.construct(&arr[i], val);
+                    _alloc.construct(&_arr[i], val);
                 _size = n;
             }
 

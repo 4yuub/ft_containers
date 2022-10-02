@@ -44,7 +44,7 @@ namespace ft {
                 return *ptr;
             }
             
-            const reference operator*() const {
+            reference operator*() const {
                 return *ptr;
             }
 
@@ -118,7 +118,7 @@ namespace ft {
                 return ptr[n];
             }
             
-            const reference operator[] (difference_type n) const {
+            reference operator[] (difference_type n) const {
                 return ptr[n];
             }
     };
