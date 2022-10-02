@@ -80,11 +80,11 @@ namespace ft {
             friend VectorIterator<U> operator+(
                 typename VectorIterator<U>::difference_type n, VectorIterator<U> const &rhs);
 
-            VectorIterator operator-(difference_type n) {
+            VectorIterator operator-(difference_type n) const {
                 return VectorIterator(ptr - n);
             }
             
-            difference_type operator-(VectorIterator const &rhs) {
+            difference_type operator-(VectorIterator const &rhs) const {
                 return ptr - rhs.ptr;
             }
 

@@ -33,8 +33,8 @@ namespace ft {
             typedef typename allocator_type::const_reference            const_reference;
             typedef VectorIterator<value_type>                          iterator;
             typedef VectorIterator<const value_type>                    const_iterator;
-            typedef reverse_iterator<const_iterator>                    const_reverse_iterator;
-            typedef reverse_iterator<iterator>                          reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
+            typedef ft::reverse_iterator<iterator>                      reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
             typedef typename allocator_type::size_type                  size_type;
 
