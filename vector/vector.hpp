@@ -146,6 +146,48 @@ namespace ft {
                 reAlloc(n);
             }
 
+            // element access
+            reference operator[] (size_type n) {
+                return _arr[n];
+            }
+            
+            const_reference operator[] (size_type n) const {
+                return _arr[n];
+            }
+            
+            reference operator at (size_type n) {
+                if (n >= _size) throw std::out_of_range("vector");
+                return _arr[n];
+            }
+            
+            const_reference operator at (size_type n) const {
+                if (n >= _size) throw std::out_of_range("vector");
+                return _arr[n];
+            }
+
+            reference front() {
+                return _arr[0];
+            }
+            
+            const_reference front() const {
+                return _arr[0];
+            }
+
+            reference back() {
+                return _arr[size - 1];
+            }
+            
+            const_reference back() const {
+                return _arr[size - 1];
+            }
+
+            value_type* data() {
+                return _arr;
+            }
+            
+            const value_type* data() const {
+                return _arr;
+            }
     };
 } // namespace ft
 

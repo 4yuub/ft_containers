@@ -2,5 +2,6 @@
 # define _COMMON_HPP_INCLUDED_ 
 # include <memory>
 # include <cstddef>
+# include <stdexcept>
 
 #endif
