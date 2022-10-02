@@ -41,7 +41,7 @@ int test_iterator(void)
   std::cout << "reverse iterator test: \n";
   NS::reverse_iterator<MyIterator> rfrom(until);
   NS::reverse_iterator<MyIterator> runtil(from);
-  for (NS::reverse_iterator<MyIterator> it=rfrom; it.base()!=runtil.base(); it++)
+  for (NS::reverse_iterator<MyIterator> it=rfrom; it!=runtil; it++)
     std::cout << *it << ' ';
   std::cout << '\n';
   return 0;
