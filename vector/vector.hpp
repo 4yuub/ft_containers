@@ -3,6 +3,7 @@
 #define Max(x, y) ((x > y) ? (x) : (y))
 #include "common.hpp"
 #include "iterator.hpp"
+#include "VectorIterator.hpp"
 
 namespace ft {
     template <class T, class Alloc = std::allocator<T> >
@@ -30,8 +31,8 @@ namespace ft {
             typedef Alloc                                      allocator_type;
             typedef typename allocator_type::reference         reference;
             typedef typename allocator_type::const_reference   const_reference;
-            typedef random_access_iterator<value_type>         iterator;
-            typedef random_access_iterator<const value_type>   const_iterator; //TODO... emplement the iterator
+            typedef VectorIterator<value_type>                 iterator;
+            typedef VectorIterator<const value_type>           const_iterator;
             typedef reverse_iterator<iterator>                 reverse_iterator;
             typedef reverse_iterator<const_iterator>           const_reverse_iterator;
             typedef iterator_traits<iterator>::difference_type difference_type;
@@ -111,6 +112,39 @@ namespace ft {
             }
 
             // member functions
+
+            // iterators
+            iterator begin() {
+                return iterator(_arr);
+            }
+            
+            const_iterator begin() const {
+                return const_iterator(_arr);
+            }
+
+            iterator end() {
+                return iterator(_arr == NULL ? _arr : _arr + _size);
+            }
+
+            const_iterator end() const {
+                return const_iterator(_arr == NULL ? _arr : _arr + _size);
+            }
+
+            reverse_iterator rbegin() {
+                return reverse_iterator(begin());
+            }
+            
+            const_reverse_iterator rbegin() const {
+                return const_reverse_iterator(begin());
+            }
+            
+            reverse_iterator rend() {
+                return reverse_iterator(end());
+            }
+            
+            const_reverse_iterator rend() const {
+                return const_reverse_iterator(end());
+            }
 
             // capacity
             size_type size() const {
