@@ -352,7 +352,7 @@ namespace ft {
                 return iterator(&_arr[pos]);
             }
             
-            iterator erase (iterator first, iterator last) {
+            iterator erase(iterator first, iterator last) {
                 int64_t pos = first - begin();
                 value_type* ptr = &_arr[pos];
                 int64_t diff = distance(first, last);
@@ -363,6 +363,31 @@ namespace ft {
                 _moveRange(ptr, &ptr[_size], &ptr[-diff]);
                 _size -= diff;
                 return iterator(&_arr[pos]);
+            }
+
+            void swap(vector& x) {
+                value_type* tmp_arr = x._arr;
+                size_t tmp_size = x._size;
+                size_t tmp_capacity = x._capacity;
+                allocator_type  tmp_alloc = x._alloc;
+
+                x._arr = _arr;
+                x._size = size;
+                x._capacity = _capacity;
+                x._alloc = _alloc;
+
+                _arr = tmp_arr;
+                _size = tmp_size;
+                _capacity = tmp_capacity;
+                _alloc = tmp_alloc;
+            }
+
+            void clear() {
+                erase(begin(), end());
+            }
+
+            allocator_type get_allocator() const {
+                return _alloc;
             }
     };
 } // namespace ft
