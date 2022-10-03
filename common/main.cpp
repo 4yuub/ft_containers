@@ -18,6 +18,7 @@ int main(void) {
     lexicographical_compare_test();
     equal_test();
     pair_test();
+    vector_test();
     return 0;
 #endif
 }

@@ -6,5 +6,6 @@ int test_type_traits(void);
 int lexicographical_compare_test(void);
 int equal_test(void);
 int pair_test(void);
+int vector_test(void);
 
 #endif
