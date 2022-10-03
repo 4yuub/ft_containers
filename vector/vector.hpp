@@ -308,6 +308,39 @@ namespace ft {
                 _size++;
                 return position;
             }
+
+            void insert (iterator position, size_type n, const value_type& val) {
+                int pos = position - begin();
+                if (_size + n > _capacity)
+                    _reAlloc(Max(_capacity * 2, _size + n));
+                value_type* ptr = &_arr[pos];
+                _moveRange(ptr, &_arr[_size], &ptr[n]);
+                for (int i = 0; i < n; i++) {
+                    if (ptr < &_arr[_size])
+                        *(ptr++) = val;
+                    else
+                        _alloc.construct(ptr++, val);
+                }
+                _size += n;
+            }
+
+            template <class InputIterator>
+            void insert (iterator position, InputIterator first, InputIterator last) {
+                int pos = position - begin();
+                difference_type n = distance(first, last);
+                if (_size + n > _capacity)
+                    _reAlloc(Max(_capacity * 2, _size + n));
+                value_type* ptr = &_arr[pos];
+                _moveRange(ptr, &_arr[_size], &ptr[n]);
+                for (int i = 0; i < n; i++) {
+                    if (ptr < &_arr[_size])
+                        *(ptr++) = *first;
+                    else
+                        _alloc.construct(ptr++, *first);
+                    first++;
+                }
+                _size += n;
+            }
     };
 } // namespace ft
 
