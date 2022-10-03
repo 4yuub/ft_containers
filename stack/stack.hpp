@@ -1,5 +1,6 @@
 #ifndef _STACK_HPP_INCLUDED_
 #define _STACK_HPP_INCLUDED_
+#include "common.hpp"
 #include "vector.hpp"
 
 namespace ft {

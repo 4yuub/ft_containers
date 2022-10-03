@@ -7,5 +7,6 @@ int lexicographical_compare_test(void);
 int equal_test(void);
 int pair_test(void);
 int vector_test(void);
+int stack_test(void);
 
 #endif

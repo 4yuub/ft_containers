@@ -19,6 +19,7 @@ int main(void) {
     equal_test();
     pair_test();
     vector_test();
+    stack_test();
     return 0;
 #endif
 }

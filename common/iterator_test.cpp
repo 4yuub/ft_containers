@@ -3,6 +3,7 @@
 #if defined(USING_STD)
 # define NS std
 #include <iterator>
+#include <cstddef>
 #elif defined(USING_FT)
 # define NS ft
 #include "iterator.hpp"
