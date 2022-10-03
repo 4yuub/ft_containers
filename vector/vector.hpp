@@ -26,6 +26,44 @@ namespace ft {
                 _capacity = new_capacity;
             }
 
+            void _moveRangeSTE(T* start, T* end, T* dest) { // start to end
+                while (start < end) {
+                    if (dest < end) {
+                        *dest = *start;
+                    }
+                    else {
+                        _alloc.construct(dest, *start);
+                    }
+                    dest++;
+                    start++;
+                }
+            }
+            
+            void _moveRangeETS(T* start, T* end, T* dest) { // end to start
+                T* i_end = end;
+                int64_t diff = dest - start;
+                dest = (--end) + diff;
+                while (end >= start) {
+                    if (dest < i_end) {
+                        *dest = *end;
+                    }
+                    else {
+                        _alloc.construct(dest, *end);
+                    }
+                    end--;
+                    dest--;
+                }
+            }
+
+            void _moveRange(T* start, T* end, T* dest) {
+                if (start == dest)
+                    return ;
+                if (start > dest) {
+                    _moveRangeSTE(start, end, dest);
+                }
+                _moveRangeETS(start, end, dest);
+            }
+
         public:
             typedef T                                                   value_type;
             typedef Alloc                                               allocator_type;
@@ -174,10 +212,10 @@ namespace ft {
                 return _size == 0;
             }
 
-            void resever(size_type n) {
+            void reserve(size_type n) {
                 if (n <= _capacity)
                     return ;
-                reAlloc(n);
+                _reAlloc(n);
             }
 
             // element access
@@ -258,6 +296,17 @@ namespace ft {
                     return ;
                 _alloc.destory(&_arr[_size]);
                 _size--;
+            }
+
+            iterator insert(iterator position, const value_type& val) {
+                int64_t pos = position - begin();
+                if (_size >= _capacity)
+                    _reAlloc(Max(_capacity * 2, 1)); // one if current _capacity is 0
+                value_type* ptr = &_arr[pos];
+                _moveRange(ptr, &_arr[_size], &ptr[1]);
+                *ptr = val;
+                _size++;
+                return position;
             }
     };
 } // namespace ft
