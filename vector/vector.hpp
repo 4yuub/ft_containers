@@ -17,7 +17,7 @@ namespace ft {
             void _reAlloc(typename Alloc::size_type new_capacity) {
                 T *new_arr = _alloc.allocate(new_capacity);
 
-                for (int i = 0; i < _size && i < new_capacity; i++) {
+                for (int64_t i = 0; i < _size && i < new_capacity; i++) {
                     _alloc.construct(&new_arr[i],  _arr[i]);
                     _alloc.destroy(&_arr[i]);
                 }
@@ -60,6 +60,7 @@ namespace ft {
                     return ;
                 if (start > dest) {
                     _moveRangeSTE(start, end, dest);
+                    return ;
                 }
                 _moveRangeETS(start, end, dest);
             }
@@ -113,7 +114,7 @@ namespace ft {
                 _capacity = obj._capacity;
                 _arr = _alloc.allocate(_capacity);
                 _size = obj._size;
-                for (int i = 0; i < _size; i++)
+                for (size_t i = 0; i < _size; i++)
                     _alloc.construct(&_arr[i], obj._arr[i]);
             }
 
@@ -121,7 +122,7 @@ namespace ft {
             ~vector() {
                 if (_arr == NULL)
                     return ;
-                for (int i = 0; i < _size; i++)
+                for (size_t i = 0; i < _size; i++)
                     _alloc.destroy(&_arr[i]);
                 _alloc.deallocate(_arr, _capacity);
             }
@@ -132,19 +133,19 @@ namespace ft {
                     return *this;
 
                 if (_size >= rhs._size) {
-                    for (int i = 0; i < rhs._size; i++)
+                    for (size_t i = 0; i < rhs._size; i++)
                         _arr[i] = rhs._arr[i];
-                    for (int i = rhs._size; i < _size; i++)
+                    for (size_t i = rhs._size; i < _size; i++)
                         _alloc.destroy(&_arr[i]);
                     return *this;
                 }
-                for (int i = 0; i < _size; i++)
+                for (size_t i = 0; i < _size; i++)
                     _alloc.destroy(&_arr[i]);
                 _alloc.deallocate(_arr, _capacity);
                 _arr = _alloc.allocate(rhs._capacity);
                 _capacity = rhs._capacity;
                 _size = rhs._size;
-                for (int i = 0; i < _size; i++)
+                for (size_t i = 0; i < _size; i++)
                     _alloc.construct(&_arr[i], rhs._arr[i]);
                 return *this;
             }
@@ -197,9 +198,9 @@ namespace ft {
                 if (n > _capacity) {
                     _reAlloc(Max(_capacity * 2, n));
                 }
-                for (int i = n; i < _size; i++) // if n < size
+                for (size_t i = n; i < _size; i++) // if n < size
                     _alloc.destroy(&_arr[i]);
-                for (int i = _size; i < n; i++) // if n > size
+                for (size_t i = _size; i < n; i++) // if n > size
                     _alloc.construct(&_arr[i], val);
                 _size = n;
             }
@@ -267,9 +268,9 @@ namespace ft {
                 difference_type new_size = distance(first, last);
                 if (new_size > _capacity)
                     _reAlloc(new_size);
-                for (int i = new_size; i < _size; i++) // if new_size < size
+                for (int64_t i = new_size; i < _size; i++) // if new_size < size
                     _alloc.destroy(&_arr[i]);
-                for (int i = 0; i < new_size; i++)
+                for (int64_t i = 0; i < new_size; i++)
                     _alloc.construct(&_arr[i], *(first++));
                 _size = new_size;
             }
@@ -277,9 +278,9 @@ namespace ft {
             void assign(size_type n, const value_type& val) {
                 if (n > _capacity)
                     _reAlloc(n);
-                for (int i = n; i < _size; i++) // if n < size
+                for (int64_t i = n; i < _size; i++) // if n < size
                     _alloc.destroy(&_arr[i]);
-                for (int i = 0; i < n; i++)
+                for (int64_t i = 0; i < n; i++)
                     _alloc.construct(&_arr[i], val);
                 _size = n;
             }
@@ -310,12 +311,12 @@ namespace ft {
             }
 
             void insert (iterator position, size_type n, const value_type& val) {
-                int pos = position - begin();
+                int64_t pos = position - begin();
                 if (_size + n > _capacity)
                     _reAlloc(Max(_capacity * 2, _size + n));
                 value_type* ptr = &_arr[pos];
                 _moveRange(ptr, &_arr[_size], &ptr[n]);
-                for (int i = 0; i < n; i++) {
+                for (size_type i = 0; i < n; i++) {
                     if (ptr < &_arr[_size])
                         *(ptr++) = val;
                     else
@@ -326,13 +327,13 @@ namespace ft {
 
             template <class InputIterator>
             void insert (iterator position, InputIterator first, InputIterator last) {
-                int pos = position - begin();
+                int64_t pos = position - begin();
                 difference_type n = distance(first, last);
                 if (_size + n > _capacity)
                     _reAlloc(Max(_capacity * 2, _size + n));
                 value_type* ptr = &_arr[pos];
                 _moveRange(ptr, &_arr[_size], &ptr[n]);
-                for (int i = 0; i < n; i++) {
+                for (int64_t i = 0; i < n; i++) {
                     if (ptr < &_arr[_size])
                         *(ptr++) = *first;
                     else
@@ -340,6 +341,28 @@ namespace ft {
                     first++;
                 }
                 _size += n;
+            }
+
+            iterator erase(iterator position) {
+                int64_t pos = position - begin();
+                _alloc.destroy(&_arr[pos]);
+                value_type* ptr = &_arr[pos];
+                _moveRange(ptr, &_arr[_size], &ptr[-1]);
+                _size--;
+                return iterator(&_arr[pos]);
+            }
+            
+            iterator erase (iterator first, iterator last) {
+                int64_t pos = first - begin();
+                value_type* ptr = &_arr[pos];
+                int64_t diff = distance(first, last);
+                for (int i = 0; first < last; i++) {
+                    _alloc.destroy(&_arr[pos + i]);
+                    first++;
+                }
+                _moveRange(ptr, &ptr[_size], &ptr[-diff]);
+                _size -= diff;
+                return iterator(&_arr[pos]);
             }
     };
 } // namespace ft
