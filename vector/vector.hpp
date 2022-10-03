@@ -111,7 +111,7 @@ namespace ft {
 
             vector(const vector& obj) {
                 _alloc = obj._alloc;
-                _capacity = obj._capacity;
+                _capacity = obj._size;
                 _arr = _alloc.allocate(_capacity);
                 _size = obj._size;
                 for (size_t i = 0; i < _size; i++)
@@ -360,7 +360,7 @@ namespace ft {
                     _alloc.destroy(&_arr[pos + i]);
                     first++;
                 }
-                _moveRange(ptr, &ptr[_size], &ptr[-diff]);
+                _moveRange(&_arr[last - begin()], &ptr[_size], ptr);
                 _size -= diff;
                 return iterator(&_arr[pos]);
             }
