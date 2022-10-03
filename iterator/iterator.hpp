@@ -80,6 +80,10 @@ namespace ft {
                 return *this;
             }
 
+            reverse_iterator operator-(difference_type n) const {
+                return reverse_iterator(current + n);
+            }
+
             reverse_iterator &operator--() {
                 return current++, *this;
             } // pre decrement

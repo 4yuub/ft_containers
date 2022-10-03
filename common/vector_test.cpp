@@ -7,7 +7,7 @@
 #include <vector>
 #elif defined(USING_FT)
 # define NS ft
-#include "vector"
+#include "vector.hpp"
 #endif
 
 #ifdef NS

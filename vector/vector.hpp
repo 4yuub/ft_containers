@@ -17,7 +17,7 @@ namespace ft {
             void _reAlloc(typename Alloc::size_type new_capacity) {
                 T *new_arr = _alloc.allocate(new_capacity);
 
-                for (int64_t i = 0; i < _size && i < new_capacity; i++) {
+                for (size_t i = 0; i < _size && i < new_capacity; i++) {
                     _alloc.construct(&new_arr[i],  _arr[i]);
                     _alloc.destroy(&_arr[i]);
                 }
@@ -265,12 +265,12 @@ namespace ft {
             // modifiers
             template <class InputIterator> 
             void assign(InputIterator first, InputIterator last) {
-                difference_type new_size = distance(first, last);
+                size_t new_size = distance(first, last);
                 if (new_size > _capacity)
                     _reAlloc(new_size);
-                for (int64_t i = new_size; i < _size; i++) // if new_size < size
+                for (size_t i = new_size; i < _size; i++) // if new_size < size
                     _alloc.destroy(&_arr[i]);
-                for (int64_t i = 0; i < new_size; i++)
+                for (size_t i = 0; i < new_size; i++)
                     _alloc.construct(&_arr[i], *(first++));
                 _size = new_size;
             }
@@ -278,9 +278,9 @@ namespace ft {
             void assign(size_type n, const value_type& val) {
                 if (n > _capacity)
                     _reAlloc(n);
-                for (int64_t i = n; i < _size; i++) // if n < size
+                for (size_t i = n; i < _size; i++) // if n < size
                     _alloc.destroy(&_arr[i]);
-                for (int64_t i = 0; i < n; i++)
+                for (size_type i = 0; i < n; i++)
                     _alloc.construct(&_arr[i], val);
                 _size = n;
             }
@@ -295,7 +295,7 @@ namespace ft {
             void pop_back() {
                 if (empty())
                     return ;
-                _alloc.destory(&_arr[_size]);
+                _alloc.destroy(&_arr[_size]);
                 _size--;
             }
 
@@ -372,7 +372,7 @@ namespace ft {
                 allocator_type  tmp_alloc = x._alloc;
 
                 x._arr = _arr;
-                x._size = size;
+                x._size = _size;
                 x._capacity = _capacity;
                 x._alloc = _alloc;
 

@@ -17,7 +17,7 @@ COMMON_SRCS = common/main.cpp common/iterator_test.cpp common/type_traits.cpp \
 			  common/algorithm_test.cpp common/pair_test.cpp common/vector_test.cpp
 COMMON_OBJS = $(COMMON_SRCS:.cpp=.o)
 COMMON_HEADERS = common/common.hpp common/tests.hpp
-INCLUDES = -Icommon -Iiterator -Itype_traits -Ialgorithm -Iutility
+INCLUDES = -Icommon -Iiterator -Itype_traits -Ialgorithm -Iutility -Ivector
 HEADERS = iterator/iterator.hpp iterator/iterator_traits.hpp type_traits/type_traits.hpp \
 		  algorithm/algorithm.hpp utility/utility.hpp vector/vector.hpp
 
