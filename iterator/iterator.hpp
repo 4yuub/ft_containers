@@ -147,9 +147,9 @@ namespace ft {
     // distance
     namespace detail {
         template <class It>
-        typename std::iterator_traits<It>::difference_type
+        typename ft::iterator_traits<It>::difference_type
         do_distance(It first, It last, input_iterator_tag) {
-           typename std::iterator_traits<It>::difference_type dist = 0;
+           typename ft::iterator_traits<It>::difference_type dist = 0;
            while (first != last) {
                first++;
                dist++;
@@ -158,7 +158,7 @@ namespace ft {
         }
         
         template <class It>
-        typename std::iterator_traits<It>::difference_type
+        typename ft::iterator_traits<It>::difference_type
         do_distance(It first, It last, random_access_iterator_tag) {
            return last - first;
         }
