@@ -1,0 +1,24 @@
+#!/usr/bin/python3
+from timeit import timeit
+
+setup = "from subprocess import run, DEVNULL"
+stmt = f"run(['%s'], stdout=DEVNULL)"
+
+std = input("std: ")
+ft = input("ft: ")
+
+try:
+    print("runing std version...")
+    time_std = timeit(stmt % (std, ), setup, number=1_000);
+    print("time:", time_std)
+
+    print("runing ft version...")
+    time_ft = timeit(stmt % (ft, ), setup, number=1_000);
+    print("time:", time_ft)
+
+    if time_ft < time_std:
+        print("ft is faster than std by", round(time_std / time_ft, 2), "times")
+    else:
+        print("std is faster than ft by", round(time_ft / time_std, 2), "times")
+except FileNotFoundError:
+    print("Executables not found")
