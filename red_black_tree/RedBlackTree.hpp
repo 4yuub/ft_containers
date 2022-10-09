@@ -23,7 +23,7 @@ class RedBlackTree {
                 bool           isLeftChild;
                 bool           isNull;
             
-                Node(T const &pValue, Node *pParent, bool pIsNull=false, bool pIsLeftChild=false) : value(pValue) {
+                Node(T const &pValue, bool pIsNull=false) : value(pValue) {
                     _comp = Comp();
                     _alloc = std::allocator<Node>();
                     if (pIsNull) {
@@ -42,8 +42,8 @@ class RedBlackTree {
                         *left = Node(pValue, this, true);
                         left->isLeftChild = true;
                     }
-                    parent = pParent;
-                    isLeftChild = pIsLeftChild;
+                    parent = NULL;
+                    isLeftChild = false;
                     isNull = pIsNull;
                 }
 
@@ -117,7 +117,7 @@ class RedBlackTree {
         RedBlackTree() {
             _alloc = std::allocator<Node>();
             _end = _alloc.allocate(1);
-            *_end = Node(T(), NULL, true);
+            *_end = Node(T(), true);
             _root = NULL;
         }
 
@@ -129,6 +129,39 @@ class RedBlackTree {
             _alloc.deallocate(_end, 1);
         }
 
+        void insert(T const &pValue) {
+            Node *newNode = _alloc.allocate(1);
+            *newNode = Node(pValue);
+            if (!_root) {
+                _root = newNode;
+                _root->color = Node::Black;
+                _root->isLeftChild = true;
+                _end->updateLeft(_root);
+                return;
+            }
+            Node *current = _root;
+            while (true) {
+                if (newNode == current) {
+                    return;
+                }
+                if (newNode < current) {
+                    if (current->left->isNull) {
+                        current->updateLeft(newNode);
+                        newNode->isLeftChild = true;
+                        break;
+                    }
+                    current = current->left;
+                }
+                else {
+                    if (current->right->isNull) {
+                        current->updateRight(newNode);
+                        break;
+                    }
+                    current = current->right;
+                }
+            }
+            // _insertFixup(newNode);
+        }
 };
 
 #endif
