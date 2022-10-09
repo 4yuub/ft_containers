@@ -113,6 +113,54 @@ class RedBlackTree {
             _alloc.deallocate(pNode, 1);
         }
 
+        void _rotateLeft(Node *pNode) {
+            Node *node = pNode;
+            Node *parent = node->parent;
+            Node *right = node->right;
+            Node *rightLeft = right->left;
+
+            right->parent = node->parent;
+            right->updateLeft(node);
+            if (node->isLeftChild) {
+                parent->updateLeft(right);
+                right->isLeftChild = true;
+            } else {
+                parent->updateRight(right);
+                right->isLeftChild = false;
+            }
+
+            node->isLeftChild = true;
+            node->parent = right;
+            node->updateRight(rightLeft);
+            
+            rightLeft->isLeftChild = false;
+            rightLeft->parent = node;
+        }
+
+        void _rotateRight(Node *pNode) {
+            Node *node = pNode;
+            Node *parent = node->parent;
+            Node *left = node->left;
+            Node *leftRight = left->right;
+
+            left->parent = node->parent;
+            left->updateRight(node);
+            if (node->isLeftChild) {
+                parent->updateLeft(left);
+                left->isLeftChild = true;
+            } else {
+                parent->updateRight(left);
+                left->isLeftChild = false;
+            }
+
+            node->isLeftChild = false;
+            node->parent = left;
+            node->updateLeft(leftRight);
+
+            leftRight->isLeftChild = true;
+            leftRight->parent = node;
+        }
+
         void _printTree(const std::string &prefix, Node *node, bool is_right) {
             if (node->isNull) return;
             std::cout << prefix;
