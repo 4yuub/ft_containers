@@ -161,6 +161,89 @@ class RedBlackTree {
             leftRight->parent = node;
         }
 
+        Node *_getUncel(Node *pNode) {
+            Node *node = pNode;
+            Node *parent = node->parent;
+            Node *grandParent = parent->parent;
+            Node *uncle = NULL;
+            if (parent->isLeftChild) {
+                uncle = grandParent->right;
+            } else {
+                uncle = grandParent->left;
+            }
+            return uncle;
+        }
+
+        void _updateRoot(Node *pNode) {
+            _root = pNode;
+            _root->color = Node::Black;
+            _root->isLeftChild = true;
+            _root->parent = _end;
+            _end->left = _root; 
+        }
+
+        void _insertFixup(Node *pNode) {
+            if (pNode->color == Node::Black)
+                return;
+            if (pNode == _root) {
+                _root->color = Node::Black;
+                return;
+            }
+            if (pNode->color == Node::Red && pNode->parent->color == Node::Black)
+                return;
+        
+            Node *node = pNode;
+            Node *uncle = _getUncel(node);
+            Node *parent = node->parent;
+            Node *grandParent = parent->parent;
+
+            if (uncle->color == Node::Red) {
+                parent->color = Node::Black;
+                uncle->color = Node::Black;
+                parent->parent->color = Node::Red;
+                _insertFixup(parent->parent);
+                return;
+            }
+
+            if (node->isLeftChild && parent->isLeftChild) {
+                _rotateRight(grandParent);
+                grandParent->color = Node::Red;
+                parent->color = Node::Black;
+                if (grandParent == _root)
+                    _updateRoot(parent);
+                return;
+            }
+
+            if (!node->isLeftChild && !parent->isLeftChild) {
+                _rotateLeft(grandParent);
+                grandParent->color = Node::Red;
+                parent->color = Node::Black;
+                if (grandParent == _root)
+                    _updateRoot(parent);
+                return;
+            }
+
+            if (node->isLeftChild && !parent->isLeftChild) {
+                _rotateRight(parent);
+                _rotateLeft(grandParent);
+                grandParent->color = Node::Red;
+                node->color = Node::Black;
+                if (grandParent == _root)
+                    _updateRoot(node);
+                return;
+            }
+
+            if (!node->isLeftChild && parent->isLeftChild) {
+                _rotateLeft(parent);
+                _rotateRight(grandParent);
+                grandParent->color = Node::Red;
+                node->color = Node::Black;
+                if (grandParent == _root)
+                    _updateRoot(node);
+                return;
+            }
+        }
+
         void _printTree(const std::string &prefix, Node *node, bool is_right) {
             if (node->isNull) return;
             std::cout << prefix;
@@ -198,11 +281,7 @@ class RedBlackTree {
             Node *newNode = _alloc.allocate(1);
             *newNode = Node(pValue);
             if (!_root) {
-                _root = newNode;
-                _root->color = Node::Black;
-                _root->isLeftChild = true;
-                _root->parent = _end;
-                _end->left = _root;
+                _updateRoot(newNode);
                 return;
             }
             Node *current = _root;
@@ -226,7 +305,7 @@ class RedBlackTree {
                     current = current->right;
                 }
             }
-            // _insertFixup(newNode);
+            _insertFixup(newNode);
         }
 };
 
