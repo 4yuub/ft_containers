@@ -36,10 +36,10 @@ class RedBlackTree {
                         color = Red;
 
                         right = _alloc.allocate(1);
-                        *right = Node(pValue, this, true);
+                        *right = Node(pValue, true);
 
                         left = _alloc.allocate(1);
-                        *left = Node(pValue, this, true);
+                        *left = Node(pValue, true);
                         left->isLeftChild = true;
                     }
                     parent = NULL;
@@ -113,7 +113,24 @@ class RedBlackTree {
             _alloc.deallocate(pNode, 1);
         }
 
+        void _printTree(const std::string &prefix, Node *node, bool is_right) {
+            if (node->isNull) return;
+            std::cout << prefix;
+            if (!node->parent->isNull)
+                std::cout << (is_right ? "├─ r:" : "└─ l:" );
+            else
+                std::cout << "root:";
+
+            std::cout << (node->color == Node::Red ? "\033[0;31m" : "\033[0m") << node->value << "\033[0m" << std::endl; 
+            _printTree( prefix + (is_right ? "│  " : "   "), node->right, true);
+            _printTree( prefix + (is_right ? "│  " : "   "), node->left, false);
+        }
+
     public:
+        void printTree() {
+            _printTree("", _root, false);
+        }
+
         RedBlackTree() {
             _alloc = std::allocator<Node>();
             _end = _alloc.allocate(1);
@@ -136,7 +153,8 @@ class RedBlackTree {
                 _root = newNode;
                 _root->color = Node::Black;
                 _root->isLeftChild = true;
-                _end->updateLeft(_root);
+                _root->parent = _end;
+                _end->left = _root;
                 return;
             }
             Node *current = _root;
