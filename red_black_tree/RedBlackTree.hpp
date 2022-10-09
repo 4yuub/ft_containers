@@ -47,17 +47,26 @@ class RedBlackTree {
                     isNull = pIsNull;
                 }
 
-                ~Node() {
-                    if (isNull)
-                        return ;
+                ~Node() {}
+
+                void updateLeft(Node *pLeft) {
                     if (left->isNull) {
                         _alloc.destroy(left);
                         _alloc.deallocate(left, 1);
                     }
+                    left = pLeft;
+                    left->parent = this;
+                    left->isLeftChild = true;
+                }
+
+                void updateRight(Node *pRight) {
                     if (right->isNull) {
                         _alloc.destroy(right);
                         _alloc.deallocate(right, 1);
                     }
+                    right = pRight;
+                    right->parent = this;
+                    right->isLeftChild = false;
                 }
 
                 bool operator<(Node const &rhs) const {
@@ -84,6 +93,42 @@ class RedBlackTree {
                     return !(*this == rhs);
                 }
         };
+    
+    private:
+        Node                    *_root;
+        Node                    *_end;
+        std::allocator<Node>    _alloc;
+
+    private:
+        void _deleteTree(Node *pNode) {
+            if (!pNode) return;
+            if (pNode->isNull) {
+                _alloc.destroy(pNode);
+                _alloc.deallocate(pNode, 1);
+                return;
+            }
+            _deleteTree(pNode->left);
+            _deleteTree(pNode->right);
+            _alloc.destroy(pNode);
+            _alloc.deallocate(pNode, 1);
+        }
+
+    public:
+        RedBlackTree() {
+            _alloc = std::allocator<Node>();
+            _end = _alloc.allocate(1);
+            *_end = Node(T(), NULL, true);
+            _root = NULL;
+        }
+
+        ~RedBlackTree() {
+            if (_root) {
+                _deleteTree(_root);
+            }
+            _alloc.destroy(_end);
+            _alloc.deallocate(_end, 1);
+        }
+
 };
 
 #endif
