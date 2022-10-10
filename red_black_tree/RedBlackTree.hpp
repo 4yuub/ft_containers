@@ -26,7 +26,9 @@ class RedBlackTree {
                 Node(T const &pValue, bool pIsNull=false) : value(pValue) {
                     _comp = Comp();
                     _alloc = std::allocator<Node>();
+                    parent = NULL;
                     if (pIsNull) {
+                        value = T();
                         color = Black;
                         right = NULL;
                         left = NULL;
@@ -37,20 +39,22 @@ class RedBlackTree {
 
                         right = _alloc.allocate(1);
                         *right = Node(pValue, true);
+                        right->parent = this;
 
                         left = _alloc.allocate(1);
                         *left = Node(pValue, true);
                         left->isLeftChild = true;
+                        left->parent = this;
                     }
-                    parent = NULL;
                     isLeftChild = false;
                     isNull = pIsNull;
                 }
 
                 ~Node() {}
 
-                void updateLeft(Node *pLeft) {
-                    if (left->isNull) {
+                void updateLeft(Node *pLeft, bool pDelete=true) {
+                    if (isNull) return;
+                    if (left->isNull && pDelete) {
                         _alloc.destroy(left);
                         _alloc.deallocate(left, 1);
                     }
@@ -59,8 +63,9 @@ class RedBlackTree {
                     left->isLeftChild = true;
                 }
 
-                void updateRight(Node *pRight) {
-                    if (right->isNull) {
+                void updateRight(Node *pRight, bool pDelete=true) {
+                    if (isNull) return;
+                    if (right->isNull && pDelete) {
                         _alloc.destroy(right);
                         _alloc.deallocate(right, 1);
                     }
@@ -120,18 +125,18 @@ class RedBlackTree {
             Node *rightLeft = right->left;
 
             right->parent = node->parent;
-            right->updateLeft(node);
+            right->updateLeft(node, false);
             if (node->isLeftChild) {
-                parent->updateLeft(right);
+                parent->updateLeft(right, false);
                 right->isLeftChild = true;
             } else {
-                parent->updateRight(right);
+                parent->updateRight(right, false);
                 right->isLeftChild = false;
             }
 
             node->isLeftChild = true;
             node->parent = right;
-            node->updateRight(rightLeft);
+            node->updateRight(rightLeft, false);
             
             rightLeft->isLeftChild = false;
             rightLeft->parent = node;
@@ -144,18 +149,18 @@ class RedBlackTree {
             Node *leftRight = left->right;
 
             left->parent = node->parent;
-            left->updateRight(node);
+            left->updateRight(node, false);
             if (node->isLeftChild) {
-                parent->updateLeft(left);
+                parent->updateLeft(left, false);
                 left->isLeftChild = true;
             } else {
-                parent->updateRight(left);
+                parent->updateRight(left, false);
                 left->isLeftChild = false;
             }
 
             node->isLeftChild = false;
             node->parent = left;
-            node->updateLeft(leftRight);
+            node->updateLeft(leftRight, false);
 
             leftRight->isLeftChild = true;
             leftRight->parent = node;
