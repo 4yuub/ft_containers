@@ -293,10 +293,10 @@ class RedBlackTree {
             }
             Node *current = _root;
             while (true) {
-                if (newNode == current) {
+                if (*newNode == *current) {
                     return;
                 }
-                if (newNode < current) {
+                if (*newNode < *current) {
                     if (current->left->isNull) {
                         current->updateLeft(newNode);
                         newNode->isLeftChild = true;
