@@ -314,6 +314,18 @@ class RedBlackTree {
             }
             _insertFixup(newNode);
         }
+
+        Node *find(T const &pValue) {
+            Node *current = _root;
+            while (true) {
+                if (current->isNull || pValue == current->value)
+                    return current;
+                if (pValue < current->value)
+                    current = current->left;
+                else
+                    current = current->right;
+            }
+        }
 };
 
 #endif
