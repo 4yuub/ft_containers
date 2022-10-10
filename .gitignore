@@ -9,3 +9,6 @@ test
 testing.cpp
 a.out
 testing
+
+#debugin files
+*.dSYM
