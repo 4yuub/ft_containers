@@ -123,10 +123,11 @@ class RedBlackTree {
             Node *parent = node->parent;
             Node *right = node->right;
             Node *rightLeft = right->left;
+            bool isLeftChild = node->isLeftChild;
 
-            right->parent = node->parent;
+            right->parent = parent;
             right->updateLeft(node, false);
-            if (node->isLeftChild) {
+            if (isLeftChild) {
                 parent->updateLeft(right, false);
                 right->isLeftChild = true;
             } else {
@@ -137,7 +138,7 @@ class RedBlackTree {
             node->isLeftChild = true;
             node->parent = right;
             node->updateRight(rightLeft, false);
-            
+
             rightLeft->isLeftChild = false;
             rightLeft->parent = node;
         }
@@ -147,10 +148,11 @@ class RedBlackTree {
             Node *parent = node->parent;
             Node *left = node->left;
             Node *leftRight = left->right;
+            bool isLeftChild = node->isLeftChild;
 
             left->parent = node->parent;
             left->updateRight(node, false);
-            if (node->isLeftChild) {
+            if (isLeftChild) {
                 parent->updateLeft(left, false);
                 left->isLeftChild = true;
             } else {
