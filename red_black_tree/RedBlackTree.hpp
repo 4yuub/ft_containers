@@ -52,7 +52,7 @@ class RedBlackTree {
 
                 ~Node() {}
 
-                void updateLeft(Node *pLeft, bool pDelete=true) {
+                void updateLeft(Node *pLeft, bool pDelete=false) {
                     if (isNull) return;
                     if (left->isNull && pDelete) {
                         _alloc.destroy(left);
@@ -63,7 +63,7 @@ class RedBlackTree {
                     left->isLeftChild = true;
                 }
 
-                void updateRight(Node *pRight, bool pDelete=true) {
+                void updateRight(Node *pRight, bool pDelete=false) {
                     if (isNull) return;
                     if (right->isNull && pDelete) {
                         _alloc.destroy(right);
@@ -126,18 +126,18 @@ class RedBlackTree {
             bool isLeftChild = node->isLeftChild;
 
             right->parent = parent;
-            right->updateLeft(node, false);
+            right->updateLeft(node);
             if (isLeftChild) {
-                parent->updateLeft(right, false);
+                parent->updateLeft(right);
                 right->isLeftChild = true;
             } else {
-                parent->updateRight(right, false);
+                parent->updateRight(right);
                 right->isLeftChild = false;
             }
 
             node->isLeftChild = true;
             node->parent = right;
-            node->updateRight(rightLeft, false);
+            node->updateRight(rightLeft);
 
             rightLeft->isLeftChild = false;
             rightLeft->parent = node;
@@ -151,18 +151,18 @@ class RedBlackTree {
             bool isLeftChild = node->isLeftChild;
 
             left->parent = node->parent;
-            left->updateRight(node, false);
+            left->updateRight(node);
             if (isLeftChild) {
-                parent->updateLeft(left, false);
+                parent->updateLeft(left);
                 left->isLeftChild = true;
             } else {
-                parent->updateRight(left, false);
+                parent->updateRight(left);
                 left->isLeftChild = false;
             }
 
             node->isLeftChild = false;
             node->parent = left;
-            node->updateLeft(leftRight, false);
+            node->updateLeft(leftRight);
 
             leftRight->isLeftChild = true;
             leftRight->parent = node;
@@ -264,6 +264,13 @@ class RedBlackTree {
             _printTree( prefix + (is_right ? "│  " : "   "), node->left, false);
         }
 
+        Node *_getPredecessor(Node *pNode) {
+            Node *leftSubtree = pNode->left;
+            while (!leftSubtree->isNull) {
+                leftSubtree = leftSubtree->right;
+            }
+            return leftSubtree->parent;
+        }
     public:
         void printTree() {
             _printTree("", _root, false);
@@ -284,7 +291,7 @@ class RedBlackTree {
             _alloc.deallocate(_end, 1);
         }
 
-        void insert(T const &pValue) {
+        void insertNode(T const &pValue) {
             Node *newNode = _alloc.allocate(1);
             *newNode = Node(pValue);
             if (!_root) {
@@ -294,11 +301,15 @@ class RedBlackTree {
             Node *current = _root;
             while (true) {
                 if (*newNode == *current) {
+                    newNode->updateLeft(newNode, true); // free left
+                    newNode->updateRight(newNode, true); // free right
+                    _alloc.destroy(newNode);
+                    _alloc.deallocate(newNode, 1);
                     return;
                 }
                 if (*newNode < *current) {
                     if (current->left->isNull) {
-                        current->updateLeft(newNode);
+                        current->updateLeft(newNode, true);
                         newNode->isLeftChild = true;
                         break;
                     }
@@ -306,7 +317,7 @@ class RedBlackTree {
                 }
                 else {
                     if (current->right->isNull) {
-                        current->updateRight(newNode);
+                        current->updateRight(newNode, true);
                         break;
                     }
                     current = current->right;
@@ -315,7 +326,7 @@ class RedBlackTree {
             _insertFixup(newNode);
         }
 
-        Node *find(T const &pValue) {
+        Node *findNode(T const &pValue) {
             Node *current = _root;
             while (true) {
                 if (current->isNull || pValue == current->value)
@@ -325,6 +336,78 @@ class RedBlackTree {
                 else
                     current = current->right;
             }
+        }
+
+        void deleteNode(T const &pValue) {
+            Node *node = findNode(pValue);
+            if (node->isNull)
+                return;
+            Node *parent = node->parent;
+            Node *left = node->left;
+            Node *right = node->right;
+            // typename Node::color_t \
+            //     original_color = node->color;
+
+            if (left->isNull && right->isNull) {
+                if (node->isLeftChild) {
+                    parent->updateLeft(left);
+                } else {
+                    parent->updateRight(left);
+                }
+                if (_root == node)
+                    _updateRoot(left);
+                _alloc.destroy(node);
+                _alloc.deallocate(node, 1);
+                _alloc.destroy(right);
+                _alloc.deallocate(right, 1);
+                // fixup
+                return;
+            }
+
+            if (left->isNull) {
+                if (node->isLeftChild) {
+                    parent->updateLeft(right);
+                } else {
+                    parent->updateRight(right);
+                }
+                if (_root == node)
+                    _updateRoot(right);
+                _alloc.destroy(node);
+                _alloc.deallocate(node, 1);
+                _alloc.destroy(left);
+                _alloc.deallocate(left, 1);
+                // fixup
+                return;
+            }
+
+            if (right->isNull) {
+                if (node->isLeftChild) {
+                    parent->updateLeft(left);
+                } else {
+                    parent->updateRight(left);
+                }
+                if (_root == node)
+                    _updateRoot(left);
+                _alloc.destroy(node);
+                _alloc.deallocate(node, 1);
+                _alloc.destroy(right);
+                _alloc.deallocate(right, 1);
+                // fixup
+                return;
+            }
+
+            Node *predecessor = _getPredecessor(node);
+            node->value = predecessor->value; // copy don't work with const
+            if (predecessor->isLeftChild) {
+                predecessor->parent->updateLeft(predecessor->left);
+            } else {
+                predecessor->parent->updateRight(predecessor->left);
+            }
+            _alloc.destroy(predecessor);
+            _alloc.deallocate(predecessor, 1);
+            _alloc.destroy(predecessor->right);
+            _alloc.deallocate(predecessor->right, 1);
+            // fixup
         }
 };
 
