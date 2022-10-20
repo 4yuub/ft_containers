@@ -182,6 +182,12 @@ class RedBlackTree {
         }
 
         void _updateRoot(Node *pNode) {
+            if (pNode->isNull) {
+                _alloc.destroy(pNode);
+                _alloc.deallocate(pNode, 1);
+                _root = NULL;
+                return;
+            }
             _root = pNode;
             _root->color = Node::Black;
             _root->isLeftChild = true;
@@ -252,7 +258,7 @@ class RedBlackTree {
         }
 
         void _printTree(const std::string &prefix, Node *node, bool is_right) {
-            if (node->isNull) return;
+            if (!node || node->isNull) return;
             std::cout << prefix;
             if (!node->parent->isNull)
                 std::cout << (is_right ? "├─ r:" : "└─ l:" );
@@ -327,6 +333,8 @@ class RedBlackTree {
         }
 
         Node *findNode(T const &pValue) {
+            if (!_root)
+                return _root;
             Node *current = _root;
             while (true) {
                 if (current->isNull || pValue == current->value)
@@ -340,7 +348,7 @@ class RedBlackTree {
 
         void deleteNode(T const &pValue) {
             Node *node = findNode(pValue);
-            if (node->isNull)
+            if (!node || node->isNull)
                 return;
             Node *parent = node->parent;
             Node *left = node->left;
@@ -403,10 +411,10 @@ class RedBlackTree {
             } else {
                 predecessor->parent->updateRight(predecessor->left);
             }
-            _alloc.destroy(predecessor);
-            _alloc.deallocate(predecessor, 1);
             _alloc.destroy(predecessor->right);
             _alloc.deallocate(predecessor->right, 1);
+            _alloc.destroy(predecessor);
+            _alloc.deallocate(predecessor, 1);
             // fixup
         }
 };
