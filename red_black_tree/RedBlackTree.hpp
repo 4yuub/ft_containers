@@ -277,6 +277,111 @@ class RedBlackTree {
             }
             return leftSubtree->parent;
         }
+    
+        Node *_getSibling(Node *pNode) {
+            if (_root == pNode) return NULL;
+            return pNode->isLeftChild ? \
+                pNode->parent->right : pNode->parent->left;
+        }
+
+        Node *_getFarNephew(Node *pNode) {
+            Node *sibling = _getSibling(pNode);
+            if (!sibling) return NULL;
+            return pNode->isLeftChild ? sibling->right : sibling->left;
+        }
+
+        Node *_getNearNephew(Node *pNode) {
+            Node *sibling = _getSibling(pNode);
+            if (!sibling) return NULL;
+            return pNode->isLeftChild ? sibling->left : sibling->right;
+        }
+
+        template<class X>
+        void _swap(X &a, X &b) {
+            X tmp(a);
+            a = b;
+            b = tmp;
+        }
+
+        void _deleteFixup(Node *pNode, typename Node::color_t pColor) {
+            if (!pNode || pColor == Node::Red) return ; //!Not srue
+            pNode->color += pColor;
+            if (pNode->color != Node::DBlack)
+                return; // nothing to fix
+            Node *node = pNode;
+            Node *parent = node->parent;
+            Node *sibling = _getSibling(node);
+            Node *farNephew = _getFarNephew(node);
+            Node *nearNephew = _getNearNephew(node);
+
+            while (true) {
+                if (node->color != Node::DBlack) break;
+                if (node == _root) {
+                    node->color = Node::Black;
+                    break;
+                }
+
+                if (parent->color == Node::Black && sibling->color == Node::Red
+                    && farNephew->color == Node::Black && nearNephew->color == Node::Black)
+                {
+                    _swap(parent->color, sibling->color);
+                    if (node->isLeftChild)
+                    {
+                        if (_root == parent)
+                            _updateRoot(parent->right);
+                        _rotateLeft(parent);
+                    }
+                    else {
+                        if (_root == parent)
+                            _updateRoot(parent->left);
+                        _rotateRight(parent);
+                    }
+                }
+
+                else if (sibling->color == Node::Black && farNephew->color == Node::Black
+                    && nearNephew->color == Node::Black)
+                {
+                    sibling->color = Node::Red;
+                    node->color -= Node::Black;
+                    parent->color += Node::Black;
+                    node = parent;
+                }
+
+                else if (parent->color == Node::Black && sibling->color == Node::Black
+                    && farNephew->color == Node::Black && nearNephew->color == Node::Red)
+                {
+                    _swap(sibling, nearNephew);
+                    if (node->isLeftChild)
+                        _rotateRight(sibling);
+                    else
+                        _rotateLeft(sibling);
+                }
+
+                else if (sibling->color == Node::Black && farNephew->color == Node::Red)
+                {
+                    if (node->isLeftChild)
+                    {
+                        if (_root == parent)
+                            _updateRoot(parent->right);
+                        _rotateLeft(parent);
+                    }
+                    else {
+                        if (_root == parent)
+                            _updateRoot(parent->left);
+                        _rotateRight(parent);
+                    }
+                    sibling->color = parent->color;
+                    parent->color = Node::Black;
+                    farNephew->color = Node::Black;
+                    node->color -= Node::Black;
+                }
+                parent = node->parent;
+                sibling = _getSibling(node);
+                farNephew = _getFarNephew(node);
+                nearNephew = _getNearNephew(node);
+            }
+        }
+
     public:
         void printTree() {
             _printTree("", _root, false);
@@ -353,8 +458,8 @@ class RedBlackTree {
             Node *parent = node->parent;
             Node *left = node->left;
             Node *right = node->right;
-            // typename Node::color_t \
-            //     original_color = node->color;
+            typename Node::color_t \
+                original_color = node->color;
 
             if (left->isNull && right->isNull) {
                 if (node->isLeftChild) {
@@ -362,13 +467,15 @@ class RedBlackTree {
                 } else {
                     parent->updateRight(left);
                 }
-                if (_root == node)
+                if (_root == node) {
                     _updateRoot(left);
+                    return;
+                }
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
                 _alloc.destroy(right);
                 _alloc.deallocate(right, 1);
-                // fixup
+                _deleteFixup(left, original_color);
                 return;
             }
 
@@ -378,13 +485,15 @@ class RedBlackTree {
                 } else {
                     parent->updateRight(right);
                 }
-                if (_root == node)
+                if (_root == node) {
                     _updateRoot(right);
+                    return;
+                }
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
                 _alloc.destroy(left);
                 _alloc.deallocate(left, 1);
-                // fixup
+                _deleteFixup(right, original_color);
                 return;
             }
 
@@ -394,13 +503,15 @@ class RedBlackTree {
                 } else {
                     parent->updateRight(left);
                 }
-                if (_root == node)
+                if (_root == node) {
                     _updateRoot(left);
+                    return;
+                }
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
                 _alloc.destroy(right);
                 _alloc.deallocate(right, 1);
-                // fixup
+                _deleteFixup(left, original_color);
                 return;
             }
 
@@ -411,11 +522,13 @@ class RedBlackTree {
             } else {
                 predecessor->parent->updateRight(predecessor->left);
             }
+            Node *newChild = predecessor->left;
+            original_color = predecessor->color;
             _alloc.destroy(predecessor->right);
             _alloc.deallocate(predecessor->right, 1);
             _alloc.destroy(predecessor);
             _alloc.deallocate(predecessor, 1);
-            // fixup
+            _deleteFixup(newChild, original_color);
         }
 };
 
