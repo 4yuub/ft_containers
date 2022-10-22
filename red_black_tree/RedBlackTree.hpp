@@ -57,6 +57,10 @@ class RedBlackTree {
                     parent = src.parent;
                     isLeftChild = src.isLeftChild;
                     isNull = src.isNull;
+                    if (!isNull) {
+                        left->parent = this;
+                        right->parent = this;
+                    }
                 }
 
                 ~Node() {}
