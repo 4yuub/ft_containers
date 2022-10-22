@@ -23,9 +23,8 @@ class RedBlackTree {
                 bool           isLeftChild;
                 bool           isNull;
             
-                Node(T const &pValue, bool pIsNull=false) : value(pValue) {
+                Node(std::allocator<Node>& pAlloc, T const &pValue, bool pIsNull=false) : _alloc(pAlloc), value(pValue) {
                     _comp = Comp();
-                    _alloc = std::allocator<Node>();
                     parent = NULL;
                     if (pIsNull) {
                         value = T();
@@ -38,11 +37,11 @@ class RedBlackTree {
                         color = Red;
 
                         right = _alloc.allocate(1);
-                        _alloc.construct(right, Node(pValue, true));
+                        _alloc.construct(right, Node(_alloc, pValue, true));
                         right->parent = this;
 
                         left = _alloc.allocate(1);
-                        _alloc.construct(left, Node(pValue, true));
+                        _alloc.construct(left, Node(_alloc, pValue, true));
                         left->isLeftChild = true;
                         left->parent = this;
                     }
@@ -50,9 +49,8 @@ class RedBlackTree {
                     isNull = pIsNull;
                 }
 
-                Node(Node const &src) : value(src.value) {
+                Node(Node const &src) : _alloc(src._alloc), value(src.value) {
                     _comp = src._comp;
-                    _alloc = src._alloc;
                     color = src.color;
                     right = src.right;
                     left = src.left;
@@ -401,7 +399,7 @@ class RedBlackTree {
         RedBlackTree() {
             _alloc = std::allocator<Node>();
             _end = _alloc.allocate(1);
-            _alloc.construct(_end, Node(T(), true));
+            _alloc.construct(_end, Node(_alloc, T(), true));
             _root = NULL;
         }
 
@@ -415,7 +413,7 @@ class RedBlackTree {
 
         void insertNode(T const &pValue) {
             Node *newNode = _alloc.allocate(1);
-            _alloc.construct(newNode, Node(pValue));
+            _alloc.construct(newNode, Node(_alloc, pValue));
             if (!_root) {
                 _updateRoot(newNode);
                 return;
