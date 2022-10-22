@@ -38,16 +38,27 @@ class RedBlackTree {
                         color = Red;
 
                         right = _alloc.allocate(1);
-                        *right = Node(pValue, true);
+                        _alloc.construct(right, Node(pValue, true));
                         right->parent = this;
 
                         left = _alloc.allocate(1);
-                        *left = Node(pValue, true);
+                        _alloc.construct(left, Node(pValue, true));
                         left->isLeftChild = true;
                         left->parent = this;
                     }
                     isLeftChild = false;
                     isNull = pIsNull;
+                }
+
+                Node(Node const &src) : value(src.value) {
+                    _comp = src._comp;
+                    _alloc = src._alloc;
+                    color = src.color;
+                    right = src.right;
+                    left = src.left;
+                    parent = src.parent;
+                    isLeftChild = src.isLeftChild;
+                    isNull = src.isNull;
                 }
 
                 ~Node() {}
@@ -390,7 +401,7 @@ class RedBlackTree {
         RedBlackTree() {
             _alloc = std::allocator<Node>();
             _end = _alloc.allocate(1);
-            *_end = Node(T(), true);
+            _alloc.construct(_end, Node(T(), true));
             _root = NULL;
         }
 
@@ -404,7 +415,7 @@ class RedBlackTree {
 
         void insertNode(T const &pValue) {
             Node *newNode = _alloc.allocate(1);
-            *newNode = Node(pValue);
+            _alloc.construct(newNode, Node(pValue));
             if (!_root) {
                 _updateRoot(newNode);
                 return;
