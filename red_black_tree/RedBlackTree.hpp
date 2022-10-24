@@ -115,6 +115,7 @@ class RedBlackTree {
     private:
         Node                    *_root;
         Node                    *_end;
+        size_t                  _size;
         std::allocator<Node>    _alloc;
 
     private:
@@ -405,6 +406,7 @@ class RedBlackTree {
             _end = _alloc.allocate(1);
             _alloc.construct(_end, Node(_alloc, T(), true));
             _root = NULL;
+            _size = 0;
         }
 
         ~RedBlackTree() {
@@ -420,6 +422,7 @@ class RedBlackTree {
             _alloc.construct(newNode, Node(_alloc, pValue));
             if (!_root) {
                 _updateRoot(newNode);
+                _size++;
                 return;
             }
             Node *current = _root;
@@ -448,6 +451,7 @@ class RedBlackTree {
                 }
             }
             _insertFixup(newNode);
+            _size++;
         }
 
         Node *findNode(T const &pValue) {
@@ -482,6 +486,7 @@ class RedBlackTree {
                 }
                 if (_root == node) {
                     _updateRoot(left);
+                    _size--;
                     return;
                 }
                 _alloc.destroy(node);
@@ -489,6 +494,7 @@ class RedBlackTree {
                 _alloc.destroy(right);
                 _alloc.deallocate(right, 1);
                 _deleteFixup(left, original_color);
+                _size--;
                 return;
             }
 
@@ -500,6 +506,7 @@ class RedBlackTree {
                 }
                 if (_root == node) {
                     _updateRoot(right);
+                    _size--;
                     return;
                 }
                 _alloc.destroy(node);
@@ -507,6 +514,7 @@ class RedBlackTree {
                 _alloc.destroy(left);
                 _alloc.deallocate(left, 1);
                 _deleteFixup(right, original_color);
+                _size--;
                 return;
             }
 
@@ -518,6 +526,7 @@ class RedBlackTree {
                 }
                 if (_root == node) {
                     _updateRoot(left);
+                    _size--;
                     return;
                 }
                 _alloc.destroy(node);
@@ -525,6 +534,7 @@ class RedBlackTree {
                 _alloc.destroy(right);
                 _alloc.deallocate(right, 1);
                 _deleteFixup(left, original_color);
+                _size--;
                 return;
             }
 
@@ -542,6 +552,11 @@ class RedBlackTree {
             _alloc.destroy(predecessor);
             _alloc.deallocate(predecessor, 1);
             _deleteFixup(newChild, original_color);
+            _size--;
+        }
+
+        size_t size() {
+            return _size;
         }
 };
 
