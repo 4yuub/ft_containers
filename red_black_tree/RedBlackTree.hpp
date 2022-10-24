@@ -138,7 +138,7 @@ class RedBlackTree {
             Node *rightLeft = right->left;
             bool isLeftChild = node->isLeftChild;
 
-            right->parent = parent;
+            // right->parent = parent;
             right->updateLeft(node);
             if (isLeftChild) {
                 parent->updateLeft(right);
@@ -149,11 +149,11 @@ class RedBlackTree {
             }
 
             node->isLeftChild = true;
-            node->parent = right;
+            // node->parent = right;
             node->updateRight(rightLeft);
 
             rightLeft->isLeftChild = false;
-            rightLeft->parent = node;
+            // rightLeft->parent = node;
         }
 
         void _rotateRight(Node *pNode) {
@@ -163,7 +163,7 @@ class RedBlackTree {
             Node *leftRight = left->right;
             bool isLeftChild = node->isLeftChild;
 
-            left->parent = node->parent;
+            // left->parent = node->parent;
             left->updateRight(node);
             if (isLeftChild) {
                 parent->updateLeft(left);
@@ -174,11 +174,11 @@ class RedBlackTree {
             }
 
             node->isLeftChild = false;
-            node->parent = left;
+            // node->parent = left;
             node->updateLeft(leftRight);
 
             leftRight->isLeftChild = true;
-            leftRight->parent = node;
+            // leftRight->parent = node;
         }
 
         Node *_getUncel(Node *pNode) {
@@ -363,7 +363,7 @@ class RedBlackTree {
                 else if (parent->color == Node::Black && sibling->color == Node::Black
                     && farNephew->color == Node::Black && nearNephew->color == Node::Red)
                 {
-                    _swap(sibling, nearNephew);
+                    _swap(sibling->color, nearNephew->color);
                     if (node->isLeftChild)
                         _rotateRight(sibling);
                     else
