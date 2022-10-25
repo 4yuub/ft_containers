@@ -2,7 +2,7 @@
 #define _REDBLACKTREE_HPP_INCLUDED_
 #include "common.hpp"
 
-template <class T, class Comp, class Alloc> 
+template <class T, class Comp> 
 class RedBlackTree {
     public:
         class Node {
@@ -335,8 +335,7 @@ class RedBlackTree {
                     break;
                 }
 
-                if (parent->color == Node::Black && sibling->color == Node::Red
-                    && farNephew->color == Node::Black && nearNephew->color == Node::Black)
+                if (sibling->color == Node::Red)
                 {
                     _swap(parent->color, sibling->color);
                     if (node->isLeftChild)
@@ -361,7 +360,7 @@ class RedBlackTree {
                     node = parent;
                 }
 
-                else if (parent->color == Node::Black && sibling->color == Node::Black
+                else if (sibling->color == Node::Black
                     && farNephew->color == Node::Black && nearNephew->color == Node::Red)
                 {
                     _swap(sibling->color, nearNephew->color);
@@ -389,6 +388,7 @@ class RedBlackTree {
                     farNephew->color = Node::Black;
                     node->color -= Node::Black;
                 }
+                
                 parent = node->parent;
                 sibling = _getSibling(node);
                 farNephew = _getFarNephew(node);
