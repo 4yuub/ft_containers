@@ -396,6 +396,26 @@ class RedBlackTree {
             }
         }
 
+        size_t _getBlackHeight(Node *node) {
+            if (!node || node->isNull) return 0;
+            size_t leftHeight = _getBlackHeight(node->left);
+            return leftHeight + (node->color == Node::Black);
+        }
+
+        bool _testRedBlack(Node *node) {
+            if (!node || node->isNull) return true;
+            if (node->color == Node::Red) {
+                if (node->left->color == Node::Red || node->right->color == Node::Red) {
+                    return false;
+                }
+            }
+            int leftBlackHeight = _getBlackHeight(node->left);
+            int rightBlackHeight = _getBlackHeight(node->right);
+            if (leftBlackHeight != rightBlackHeight) {
+                return false;
+            }
+            return _testRedBlack(node->left) && _testRedBlack(node->right);
+        }
     public:
         void printTree() {
             _printTree("", _root, false);
@@ -557,6 +577,10 @@ class RedBlackTree {
 
         size_t size() {
             return _size;
+        }
+
+        bool testRedBlack() {
+            return _testRedBlack(_root);
         }
 };
 
