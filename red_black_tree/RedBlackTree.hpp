@@ -318,7 +318,6 @@ class RedBlackTree {
         }
 
         void _deleteFixup(Node *pNode, typename Node::color_t pColor) {
-            if (!pNode || pColor == Node::Red) return ; //!Not srue
             pNode->color += pColor;
             if (pNode->color != Node::DBlack)
                 return; // nothing to fix
@@ -328,72 +327,65 @@ class RedBlackTree {
             Node *farNephew = _getFarNephew(node);
             Node *nearNephew = _getNearNephew(node);
 
-            while (true) {
-                if (node->color != Node::DBlack) break;
-                if (node == _root) {
-                    node->color = Node::Black;
-                    break;
-                }
-
-                if (sibling->color == Node::Red)
-                {
-                    _swap(parent->color, sibling->color);
-                    if (node->isLeftChild)
-                    {
-                        if (_root == parent)
-                            _updateRoot(parent->right);
-                        _rotateLeft(parent);
-                    }
-                    else {
-                        if (_root == parent)
-                            _updateRoot(parent->left);
-                        _rotateRight(parent);
-                    }
-                }
-
-                else if (sibling->color == Node::Black && farNephew->color == Node::Black
-                    && nearNephew->color == Node::Black)
-                {
-                    sibling->color = Node::Red;
-                    node->color -= Node::Black;
-                    parent->color += Node::Black;
-                    node = parent;
-                }
-
-                else if (sibling->color == Node::Black
-                    && farNephew->color == Node::Black && nearNephew->color == Node::Red)
-                {
-                    _swap(sibling->color, nearNephew->color);
-                    if (node->isLeftChild)
-                        _rotateRight(sibling);
-                    else
-                        _rotateLeft(sibling);
-                }
-
-                else if (sibling->color == Node::Black && farNephew->color == Node::Red)
-                {
-                    if (node->isLeftChild)
-                    {
-                        if (_root == parent)
-                            _updateRoot(parent->right);
-                        _rotateLeft(parent);
-                    }
-                    else {
-                        if (_root == parent)
-                            _updateRoot(parent->left);
-                        _rotateRight(parent);
-                    }
-                    sibling->color = parent->color;
-                    parent->color = Node::Black;
-                    farNephew->color = Node::Black;
-                    node->color -= Node::Black;
-                }
-                
-                parent = node->parent;
-                sibling = _getSibling(node);
-                farNephew = _getFarNephew(node);
-                nearNephew = _getNearNephew(node);
+            if (node == _root) {
+                node->color = Node::Black;
+                return;
             }
+
+            if (sibling->color == Node::Red)
+            {
+                _swap(parent->color, sibling->color);
+                if (node->isLeftChild)
+                {
+                    if (_root == parent)
+                        _updateRoot(parent->right);
+                    _rotateLeft(parent);
+                }
+                else {
+                    if (_root == parent)
+                        _updateRoot(parent->left);
+                    _rotateRight(parent);
+                }
+            }
+
+            else if (sibling->color == Node::Black && farNephew->color == Node::Black
+                && nearNephew->color == Node::Black)
+            {
+                sibling->color = Node::Red;
+                node->color -= Node::Black;
+                parent->color += Node::Black;
+                node = parent;
+            }
+
+            else if (sibling->color == Node::Black
+                && farNephew->color == Node::Black && nearNephew->color == Node::Red)
+            {
+                _swap(sibling->color, nearNephew->color);
+                if (node->isLeftChild)
+                    _rotateRight(sibling);
+                else
+                    _rotateLeft(sibling);
+            }
+
+            else if (sibling->color == Node::Black && farNephew->color == Node::Red)
+            {
+                if (node->isLeftChild)
+                {
+                    if (_root == parent)
+                        _updateRoot(parent->right);
+                    _rotateLeft(parent);
+                }
+                else {
+                    if (_root == parent)
+                        _updateRoot(parent->left);
+                    _rotateRight(parent);
+                }
+                sibling->color = parent->color;
+                parent->color = Node::Black;
+                farNephew->color = Node::Black;
+                node->color -= Node::Black;
+            }
+            _deleteFixup(node, 0);
         }
 
         size_t _getBlackHeight(Node *node) {
