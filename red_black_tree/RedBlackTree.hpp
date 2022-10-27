@@ -115,6 +115,7 @@ class RedBlackTree {
     private:
         Node                    *_root;
         Node                    *_end;
+        Comp                    _cmp;
         size_t                  _size;
         std::allocator<Node>    _alloc;
 
@@ -139,7 +140,6 @@ class RedBlackTree {
             Node *rightLeft = right->left;
             bool isLeftChild = node->isLeftChild;
 
-            // right->parent = parent;
             right->updateLeft(node);
             if (isLeftChild) {
                 parent->updateLeft(right);
@@ -150,11 +150,9 @@ class RedBlackTree {
             }
 
             node->isLeftChild = true;
-            // node->parent = right;
             node->updateRight(rightLeft);
 
             rightLeft->isLeftChild = false;
-            // rightLeft->parent = node;
         }
 
         void _rotateRight(Node *pNode) {
@@ -164,7 +162,6 @@ class RedBlackTree {
             Node *leftRight = left->right;
             bool isLeftChild = node->isLeftChild;
 
-            // left->parent = node->parent;
             left->updateRight(node);
             if (isLeftChild) {
                 parent->updateLeft(left);
@@ -175,11 +172,9 @@ class RedBlackTree {
             }
 
             node->isLeftChild = false;
-            // node->parent = left;
             node->updateLeft(leftRight);
 
             leftRight->isLeftChild = true;
-            // leftRight->parent = node;
         }
 
         Node *_getUncel(Node *pNode) {
@@ -415,6 +410,7 @@ class RedBlackTree {
 
         RedBlackTree() {
             _alloc = std::allocator<Node>();
+            _cmp = Comp();
             _end = _alloc.allocate(1);
             _alloc.construct(_end, Node(_alloc, T(), true));
             _root = NULL;
@@ -458,7 +454,7 @@ class RedBlackTree {
             while (true) {
                 if (current->isNull || pValue == current->value)
                     return current;
-                if (pValue < current->value)
+                if (_cmp(pValue, current->value))
                     current = current->left;
                 else
                     current = current->right;
