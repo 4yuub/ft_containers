@@ -452,7 +452,9 @@ namespace ft {
                     return _root;
                 Node *current = _root;
                 while (true) {
-                    if (current->isNull || pValue == current->value)
+                    if (current->isNull
+                        || (!_cmp(pValue, current->value) 
+                        && !_cmp(current->value, pValue)))
                         return current;
                     if (_cmp(pValue, current->value))
                         current = current->left;
