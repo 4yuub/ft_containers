@@ -86,16 +86,16 @@ namespace ft {
                 return _ptr != rhs._ptr;
             }
 
-            reference operator*() {
-                return *_ptr;
+            value_type &operator*() {
+                return _ptr->value;
             }
             
-            reference operator*() const {
-                return *_ptr;
+            value_type const &operator*() const {
+                return _ptr->value;
             }
 
-            const pointer operator->() const {
-                return _ptr;
+            value_type *operator->() const {
+                return &(_ptr->value);
             }
 
             RBT_Iterator &operator++() {
