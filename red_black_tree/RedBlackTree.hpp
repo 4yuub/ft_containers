@@ -438,37 +438,22 @@ class RedBlackTree {
         }
 
         void insertNode(T const &pValue) {
+            Node *nodePos = findNode(pValue);
+            if (nodePos && !nodePos->isNull)
+                return ;
             Node *newNode = _alloc.allocate(1);
             _alloc.construct(newNode, Node(_alloc, pValue));
-            if (!_root) {
+            if (!nodePos) {
                 _updateRoot(newNode);
                 _size++;
                 return;
             }
-            Node *current = _root;
-            while (true) {
-                if (*newNode == *current) {
-                    newNode->updateLeft(newNode, true); // free left
-                    newNode->updateRight(newNode, true); // free right
-                    _alloc.destroy(newNode);
-                    _alloc.deallocate(newNode, 1);
-                    return;
-                }
-                if (*newNode < *current) {
-                    if (current->left->isNull) {
-                        current->updateLeft(newNode, true);
-                        newNode->isLeftChild = true;
-                        break;
-                    }
-                    current = current->left;
-                }
-                else {
-                    if (current->right->isNull) {
-                        current->updateRight(newNode, true);
-                        break;
-                    }
-                    current = current->right;
-                }
+            Node *parent = nodePos->parent;
+            if (nodePos->isLeftChild) {
+                parent->updateLeft(newNode, true);
+            }
+            else {
+                parent->updateRight(newNode, true);
             }
             _insertFixup(newNode);
             _size++;
