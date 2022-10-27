@@ -479,14 +479,13 @@ class RedBlackTree {
                 }
                 if (_root == node) {
                     _updateRoot(left);
-                    _size--;
-                    return;
                 }
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
                 _alloc.destroy(right);
                 _alloc.deallocate(right, 1);
-                _deleteFixup(left, original_color);
+                if (_root) // because we replace root with NULL (0x0) if left->isNull
+                    _deleteFixup(left, original_color);
                 _size--;
                 return;
             }
@@ -499,8 +498,6 @@ class RedBlackTree {
                 }
                 if (_root == node) {
                     _updateRoot(right);
-                    _size--;
-                    return;
                 }
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
@@ -519,8 +516,6 @@ class RedBlackTree {
                 }
                 if (_root == node) {
                     _updateRoot(left);
-                    _size--;
-                    return;
                 }
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
