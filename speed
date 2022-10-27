@@ -4,8 +4,8 @@ from timeit import timeit
 setup = "from subprocess import run, DEVNULL"
 stmt = f"run(['%s'], stdout=DEVNULL)"
 
-std = input("std: ")
-ft = input("ft: ")
+std = input("std: ") or "./std"
+ft = input("ft: ") or "./ft"
 
 try:
     print("runing std version...")
