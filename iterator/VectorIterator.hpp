@@ -40,15 +40,11 @@ namespace ft {
                 return ptr != rhs.ptr;
             }
 
-            reference operator*() {
-                return *ptr;
-            }
-            
             reference operator*() const {
                 return *ptr;
             }
 
-            const pointer operator->() const {
+            pointer operator->() const {
                 return ptr;
             }
 
