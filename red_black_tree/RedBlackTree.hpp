@@ -177,7 +177,7 @@ namespace ft {
                 leftRight->isLeftChild = true;
             }
 
-            Node *_getUncel(Node *pNode) {
+            Node *_getUncel(Node *pNode) const {
                 Node *node = pNode;
                 Node *parent = node->parent;
                 Node *grandParent = parent->parent;
@@ -266,7 +266,7 @@ namespace ft {
                 }
             }
 
-            void _printTree(const std::string &prefix, Node *node, bool is_right) {
+            void _printTree(const std::string &prefix, Node *node, bool is_right) const {
                 if (!node || node->isNull) return;
                 std::cout << prefix;
                 if (!node->parent->isNull)
@@ -279,7 +279,7 @@ namespace ft {
                 _printTree( prefix + (is_right ? "│  " : "   "), node->left, false);
             }
 
-            Node *_getPredecessor(Node *pNode) {
+            Node *_getPredecessor(Node *pNode) const {
                 Node *leftSubtree = pNode->left;
                 while (!leftSubtree->isNull) {
                     leftSubtree = leftSubtree->right;
@@ -287,26 +287,26 @@ namespace ft {
                 return leftSubtree->parent;
             }
         
-            Node *_getSibling(Node *pNode) {
+            Node *_getSibling(Node *pNode) const {
                 if (_root == pNode) return NULL;
                 return pNode->isLeftChild ? \
                     pNode->parent->right : pNode->parent->left;
             }
 
-            Node *_getFarNephew(Node *pNode) {
+            Node *_getFarNephew(Node *pNode) const {
                 Node *sibling = _getSibling(pNode);
                 if (!sibling) return NULL;
                 return pNode->isLeftChild ? sibling->right : sibling->left;
             }
 
-            Node *_getNearNephew(Node *pNode) {
+            Node *_getNearNephew(Node *pNode) const {
                 Node *sibling = _getSibling(pNode);
                 if (!sibling) return NULL;
                 return pNode->isLeftChild ? sibling->left : sibling->right;
             }
 
             template<class X>
-            void _swap(X &a, X &b) {
+            void _swap(X &a, X &b) const {
                 X tmp(a);
                 a = b;
                 b = tmp;
@@ -383,13 +383,13 @@ namespace ft {
                 _deleteFixup(node, 0);
             }
 
-            size_t _getBlackHeight(Node *node) {
+            size_t _getBlackHeight(Node *node) const {
                 if (!node || node->isNull) return 0;
                 size_t leftHeight = _getBlackHeight(node->left);
                 return leftHeight + (node->color == Node::Black);
             }
 
-            bool _testRedBlack(Node *node) {
+            bool _testRedBlack(Node *node) const {
                 if (!node || node->isNull) return true;
                 if (node->color == Node::Red) {
                     if (node->left->color == Node::Red || node->right->color == Node::Red) {
@@ -404,7 +404,7 @@ namespace ft {
                 return _testRedBlack(node->left) && _testRedBlack(node->right);
             }
         public:
-            void printTree() {
+            void printTree() const {
                 _printTree("", _root, false);
             }
 
@@ -447,7 +447,7 @@ namespace ft {
                 _size++;
             }
 
-            Node *findNode(T const &pValue) {
+            Node *findNode(T const &pValue) const {
                 if (!_root)
                     return _root;
                 Node *current = _root;
@@ -545,12 +545,36 @@ namespace ft {
                 _size--;
             }
 
-            size_t size() {
+            size_t size() const {
                 return _size;
             }
 
-            bool testRedBlack() {
+            bool testRedBlack() const {
                 return _testRedBlack(_root);
+            }
+
+            Node *root() const {
+                return _root;
+            }
+
+            Node *end() const {
+                return _end;
+            }
+
+            Node *min() const {
+                Node *current = _root;
+                while (current && !current->isNull) {
+                    current = current->left;
+                }
+                return current ? current->parent : _end;
+            }
+
+            Node *max() const {
+                Node *current = _root;
+                while (current && !current->isNull) {
+                    current = current->right;
+                }
+                return current ? current->parent : _end;
             }
     };
 } // namespace ft
