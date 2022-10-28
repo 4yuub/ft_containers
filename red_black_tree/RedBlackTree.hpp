@@ -383,6 +383,26 @@ namespace ft {
                 _deleteFixup(node, 0);
             }
 
+            void _changeValue(Node *pPos, Node *pNewNode) {
+                Node *parent = pPos->parent;
+                Node *newNode = _alloc.allocate(1);
+                _alloc.construct(newNode, Node(_alloc, pNewNode->value));
+                newNode->color = pPos->color;
+                newNode->updateLeft(pPos->left);
+                newNode->updateRight(pPos->right);
+                if (_root == pPos) {
+                    _updateRoot(newNode);
+                }
+                else if (pPos->isLeftChild) {
+                    parent->updateLeft(newNode);
+                }
+                else {
+                    parent->updateRight(newNode);
+                }
+                _alloc.destroy(pPos);
+                _alloc.deallocate(pPos, 1);
+            }
+
             size_t _getBlackHeight(Node *node) const {
                 if (!node || node->isNull) return 0;
                 size_t leftHeight = _getBlackHeight(node->left);
@@ -529,7 +549,7 @@ namespace ft {
                 }
 
                 Node *predecessor = _getPredecessor(node);
-                node->value = predecessor->value; // copy don't work with const
+                _changeValue(node, predecessor);
                 if (predecessor->isLeftChild) {
                     predecessor->parent->updateLeft(predecessor->left);
                 } else {
