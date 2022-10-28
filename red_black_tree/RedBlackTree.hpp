@@ -388,8 +388,8 @@ namespace ft {
                 Node *newNode = _alloc.allocate(1);
                 _alloc.construct(newNode, Node(_alloc, pNewNode->value));
                 newNode->color = pPos->color;
-                newNode->updateLeft(pPos->left);
-                newNode->updateRight(pPos->right);
+                newNode->updateLeft(pPos->left, true);
+                newNode->updateRight(pPos->right, true);
                 if (_root == pPos) {
                     _updateRoot(newNode);
                 }
