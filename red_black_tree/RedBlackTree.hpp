@@ -265,7 +265,7 @@ namespace ft {
                     return;
                 }
             }
-
+#ifdef DEBUG
             void _printTree(const std::string &prefix, Node *node, bool is_right) const {
                 if (!node || node->isNull) return;
                 std::cout << prefix;
@@ -278,7 +278,7 @@ namespace ft {
                 _printTree( prefix + (is_right ? "│  " : "   "), node->right, true);
                 _printTree( prefix + (is_right ? "│  " : "   "), node->left, false);
             }
-
+#endif
             Node *_getPredecessor(Node *pNode) const {
                 Node *leftSubtree = pNode->left;
                 while (!leftSubtree->isNull) {
@@ -402,7 +402,7 @@ namespace ft {
                 _alloc.destroy(pPos);
                 _alloc.deallocate(pPos, 1);
             }
-
+#ifdef DEBUG
             size_t _getBlackHeight(Node *node) const {
                 if (!node || node->isNull) return 0;
                 size_t leftHeight = _getBlackHeight(node->left);
@@ -423,11 +423,13 @@ namespace ft {
                 }
                 return _testRedBlack(node->left) && _testRedBlack(node->right);
             }
+#endif
         public:
+#ifdef DEBUG
             void printTree() const {
                 _printTree("", _root, false);
             }
-
+#endif
             RedBlackTree() {
                 _alloc = std::allocator<Node>();
                 _cmp = Comp();
@@ -568,11 +570,11 @@ namespace ft {
             size_t size() const {
                 return _size;
             }
-
+#ifdef DEBUG
             bool testRedBlack() const {
                 return _testRedBlack(_root);
             }
-
+#endif
             Node *root() const {
                 return _root;
             }
