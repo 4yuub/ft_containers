@@ -605,6 +605,10 @@ namespace ft {
                 }
                 return current ? current->parent : _end;
             }
+
+            size_t max_size() {
+                return _alloc.max_size();
+            }
     };
 } // namespace ft
 
