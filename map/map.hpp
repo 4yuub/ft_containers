@@ -127,6 +127,22 @@ namespace ft {
                 node = _tree.insertNode(to_find);
                 return node->value.second;
             }
+
+            mapped_type& at(const key_type& k) {
+                typename tree_type::Node *node;
+                value_type to_find(k, mapped_type());
+                node = _tree.findNode(to_find);
+                if (!node || node->isNull) {
+                    throw std::out_of_range("map::at")
+                }
+                return node->value.second;
+            }
+            
+            const mapped_type& at (const key_type& k) const {
+                return at(k);
+            }
+
+            
     };
 } // namespace ft
 
