@@ -454,16 +454,16 @@ namespace ft {
                _end->left = NULL; 
             }
 
-            void insertNode(T const &pValue) {
+            Node *insertNode(T const &pValue) {
                 Node *nodePos = findNode(pValue);
                 if (nodePos && !nodePos->isNull)
-                    return ;
+                    return nodePos;
                 Node *newNode = _alloc.allocate(1);
                 _alloc.construct(newNode, Node(_alloc, pValue));
                 if (!nodePos) {
                     _updateRoot(newNode);
                     _size++;
-                    return;
+                    return newNode;
                 }
                 Node *parent = nodePos->parent;
                 if (nodePos->isLeftChild) {
@@ -474,6 +474,7 @@ namespace ft {
                 }
                 _insertFixup(newNode);
                 _size++;
+                return newNode;
             }
 
             Node *findNode(T const &pValue) const {
