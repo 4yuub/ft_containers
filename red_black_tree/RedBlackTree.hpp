@@ -447,6 +447,13 @@ namespace ft {
                 _alloc.deallocate(_end, 1);
             }
 
+            void deleteTree() {
+               _deleteTree(_root);
+               _size = 0;
+               _root = NULL;
+               _end->left = NULL; 
+            }
+
             void insertNode(T const &pValue) {
                 Node *nodePos = findNode(pValue);
                 if (nodePos && !nodePos->isNull)
