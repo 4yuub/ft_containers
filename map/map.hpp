@@ -187,6 +187,10 @@ namespace ft {
                 _cmp = tmp_cmp;
                 _alloc = tmp_alloc;
             }
+
+            void clear() {
+                _tree.deleteTree();
+            }
     };
 } // namespace ft
 
