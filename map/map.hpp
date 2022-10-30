@@ -278,6 +278,14 @@ namespace ft {
                 const_iterator it(node);
                 return ++it;
             }
+
+            pair<iterator,iterator> equal_range(const key_type& k) {
+                return make_pair(lower_bound(k), upper_bound(k));
+            }
+
+            pair<const_iterator,const_iterator> equal_range(const key_type& k) const {
+                return make_pair(lower_bound(k), upper_bound(k));
+            }        
     };
 } // namespace ft
 
