@@ -55,9 +55,7 @@ namespace ft {
                 const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
                 : _tree(RedBlackTree<value_type, value_compare>()), _cmp(comp), _alloc(alloc)
             {
-                for (;first != last; ++first) {
-                    insert(*first);
-                }
+                insert(first, last);
             }
 
             map(const map& x): _tree(RedBlackTree<value_type, value_compare>()), _cmp(x._cmp), _alloc(x._alloc)  {
@@ -149,6 +147,18 @@ namespace ft {
                 node = _tree.insertNode(val, &(ret.second));
                 ret.first = iterator(node);
                 return ret;
+            }
+
+            iterator insert(iterator position, const value_type& val) {
+                (void) position; // my map don't need hint it's so smart
+                return insert(val).first;
+            }
+            
+            template <class InputIterator>
+            void insert(InputIterator first, InputIterator last) {
+                for (;first != last; ++first) {
+                    insert(*first);
+                }
             }
     };
 } // namespace ft
