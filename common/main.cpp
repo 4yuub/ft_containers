@@ -20,6 +20,7 @@ int main(void) {
     pair_test();
     vector_test();
     stack_test();
+    map_test();
     return 0;
 #endif
 }

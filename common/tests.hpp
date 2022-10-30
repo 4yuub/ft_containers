@@ -8,5 +8,6 @@ int equal_test(void);
 int pair_test(void);
 int vector_test(void);
 int stack_test(void);
+int map_test(void);
 
 #endif
