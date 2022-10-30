@@ -516,10 +516,12 @@ namespace ft {
                 }
             }
 
-            void deleteNode(T const &pValue) {
-                Node *node = findNode(pValue);
+            size_t deleteNode(T const &pValue, Node *pToDelete=NULL) {
+                Node *node = pToDelete;
+                if (!node)
+                    node = findNode(pValue);
                 if (!node || node->isNull)
-                    return;
+                    return 0;
                 Node *parent = node->parent;
                 Node *left = node->left;
                 Node *right = node->right;
@@ -542,7 +544,7 @@ namespace ft {
                     if (_root) // because we replace root with NULL (0x0) if left->isNull
                         _deleteFixup(left, original_color);
                     _size--;
-                    return;
+                    return 1;
                 }
 
                 if (left->isNull) {
@@ -560,7 +562,7 @@ namespace ft {
                     _alloc.deallocate(left, 1);
                     _deleteFixup(right, original_color);
                     _size--;
-                    return;
+                    return 1;
                 }
 
                 if (right->isNull) {
@@ -578,7 +580,7 @@ namespace ft {
                     _alloc.deallocate(right, 1);
                     _deleteFixup(left, original_color);
                     _size--;
-                    return;
+                    return 1;
                 }
 
                 Node *predecessor = _getPredecessor(node);
@@ -596,6 +598,7 @@ namespace ft {
                 _alloc.deallocate(predecessor, 1);
                 _deleteFixup(newChild, original_color);
                 _size--;
+                return 1;
             }
 
             size_t size() const {

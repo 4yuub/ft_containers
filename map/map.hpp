@@ -162,16 +162,22 @@ namespace ft {
             }
 
             void erase(iterator position) {
-                // todo...
+                _tree.deleteNode(position._ptr->value, position._ptr);
             }
 
             size_type erase(const key_type& k) {
-                // todo...
-                return 0;
+                typename tree_type::Node *node;
+                value_type toDelete(k, mapped_type());
+                return _tree.deleteNode(toDelete);
             }
 
             void erase(iterator first, iterator last) {
-                // todo...
+                if (first == last)
+                    return ;
+                iterator tmp(first);
+                ++tmp;
+                erase(first);
+                erase(tmp, last);
             }
 
             void swap (map& x) {

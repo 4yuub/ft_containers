@@ -116,5 +116,8 @@ namespace ft {
                 return tmp;
             } // post decrement
 
+            // friends:
+            template<class Key, class X, class Compare, class Allocator>
+            friend class map;
     };
 } // namespace ft
