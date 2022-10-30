@@ -15,13 +15,13 @@ NAME_SPACE = NO_NS
 
 COMMON_SRCS = common/main.cpp common/iterator_test.cpp common/type_traits.cpp \
 			  common/algorithm_test.cpp common/pair_test.cpp common/vector_test.cpp \
-			  common/stack_test.cpp common/map_test.cpp
+			  common/stack_test.cpp common/map_test.cpp common/set_test.cpp
 COMMON_OBJS = $(COMMON_SRCS:.cpp=.o)
 COMMON_HEADERS = common/common.hpp common/tests.hpp
-INCLUDES = -Icommon -Iiterator -Itype_traits -Ialgorithm -Iutility -Ivector -Istack -Ired_black_tree -Ifunctional -Imap
+INCLUDES = -Icommon -Iiterator -Itype_traits -Ialgorithm -Iutility -Ivector -Istack -Ired_black_tree -Ifunctional -Imap -Iset
 HEADERS = iterator/iterator.hpp iterator/iterator_traits.hpp type_traits/type_traits.hpp \
 		  algorithm/algorithm.hpp utility/utility.hpp vector/vector.hpp stack/stack.hpp \
-		  functional/functional.hpp map/map.hpp
+		  functional/functional.hpp map/map.hpp set/set.hpp
 
 # Rules
 all: $(NAME)

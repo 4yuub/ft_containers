@@ -9,5 +9,6 @@ int pair_test(void);
 int vector_test(void);
 int stack_test(void);
 int map_test(void);
+int set_test(void);
 
 #endif
