@@ -48,14 +48,14 @@ namespace ft {
             }
 
             pointer _getNext(pointer node) {
-                if (!node->right->isNull) {
+                if (node->right && !node->right->isNull) {
                     return _getSuccessor(node);
                 }
                 return _getRightParent(node);
             }
 
             pointer _getPrev(pointer node) {
-                if (!node->left->isNull) {
+                if (node->left && !node->left->isNull) {
                     return _getPredecessor(node);
                 }
                 return _getLeftParent(node);

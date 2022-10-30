@@ -232,6 +232,32 @@ namespace ft {
             size_type count(const key_type& k) const {
                 return find(k) != end();
             }
+
+            iterator lower_bound(const key_type& k) {
+                typename tree_type::Node *node;
+                value_type toFind(k, mapped_type());
+                node = _tree.findNode(toFind);
+                if (!node)
+                    return iterator(_tree.end());
+                if (node->isNull) {
+                    iterator it(node);
+                    return ++it;
+                }
+                return iterator(node);
+            }
+            
+            const_iterator lower_bound(const key_type& k) const {
+                typename tree_type::Node *node;
+                value_type toFind(k, mapped_type());
+                node = _tree.findNode(toFind);
+                if (!node)
+                    return const_iterator(_tree.end());
+                if (node->isNull) {
+                    const_iterator it(node);
+                    return ++it;
+                }
+                return const_iterator(node);
+            }
     };
 } // namespace ft
 
