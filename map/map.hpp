@@ -160,6 +160,33 @@ namespace ft {
                     insert(*first);
                 }
             }
+
+            void erase(iterator position) {
+                // todo...
+            }
+
+            size_type erase(const key_type& k) {
+                // todo...
+                return 0;
+            }
+
+            void erase(iterator first, iterator last) {
+                // todo...
+            }
+
+            void swap (map& x) {
+                tree_type   tmp_tree(x._tree);
+                Compare     tmp_cmp(x._cmp);
+                Allocator   tmp_alloc(x._alloc);
+
+                x._tree = _tree;
+                x._cmp = _cmp;
+                x._alloc = _alloc;
+
+                _tree = tmp_tree;
+                _cmp = tmp_cmp;
+                _alloc = tmp_alloc;
+            }
     };
 } // namespace ft
 

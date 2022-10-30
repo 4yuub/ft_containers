@@ -438,6 +438,26 @@ namespace ft {
                 _root = NULL;
                 _size = 0;
             }
+            
+            RedBlackTree(RedBlackTree const &obj) {
+                _alloc = obj._alloc;
+                _cmp = obj._cmp;
+                _end = obj._end;
+                _root = obj._root;
+                _size = obj._size;
+            }
+
+            RedBlackTree &operator=(RedBlackTree &rhs) {
+                _alloc = rhs._alloc;
+                _cmp = rhs._cmp;
+                _end = rhs._end;
+                _root = rhs._root;
+                _size = rhs._size;
+                rhs._end = NULL;
+                rhs._root = NULL;
+                rhs._size = 0;
+                return *this;
+            }
 
             ~RedBlackTree() {
                 if (_root) {
