@@ -454,10 +454,13 @@ namespace ft {
                _end->left = NULL; 
             }
 
-            Node *insertNode(T const &pValue) {
+            Node *insertNode(T const &pValue, bool *insrtd = NULL) {
                 Node *nodePos = findNode(pValue);
-                if (nodePos && !nodePos->isNull)
+                if (nodePos && !nodePos->isNull) {
+                    if (insrtd) *insrtd = false;
                     return nodePos;
+                }
+                if (insrtd) *insrtd = true;
                 Node *newNode = _alloc.allocate(1);
                 _alloc.construct(newNode, Node(_alloc, pValue));
                 if (!nodePos) {

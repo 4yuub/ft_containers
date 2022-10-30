@@ -56,13 +56,13 @@ namespace ft {
                 : _tree(RedBlackTree<value_type, value_compare>()), _cmp(comp), _alloc(alloc)
             {
                 for (;first != last; ++first) {
-                    _tree.insertNode(*first); // change this to insert
+                    insert(*first);
                 }
             }
 
             map(const map& x): _tree(RedBlackTree<value_type, value_compare>()), _cmp(x._cmp), _alloc(x._alloc)  {
                 for (iterator it = x.begin(); it != x.end(); ++it) {
-                    _tree.insertNode(*it); // change this to insert
+                    insert(*it);
                 }
             }
 
@@ -71,7 +71,7 @@ namespace ft {
             map& operator= (const map& x) {
                 _tree.deleteTree();
                 for (iterator it = x.begin(); it != x.end(); ++it) {
-                    _tree.insertNode(*it); // change this to insert
+                    insert(*it);
                 }
             }
 
@@ -133,7 +133,7 @@ namespace ft {
                 value_type to_find(k, mapped_type());
                 node = _tree.findNode(to_find);
                 if (!node || node->isNull) {
-                    throw std::out_of_range("map::at")
+                    throw std::out_of_range("map::at");
                 }
                 return node->value.second;
             }
@@ -142,7 +142,14 @@ namespace ft {
                 return at(k);
             }
 
-            
+            // modifiers
+            pair<iterator, bool> insert(const value_type& val) {
+                typename tree_type::Node *node;
+                pair<iterator, bool>      ret;
+                node = _tree.insertNode(val, &(ret.second));
+                ret.first = iterator(node);
+                return ret;
+            }
     };
 } // namespace ft
 
