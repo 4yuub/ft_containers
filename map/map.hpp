@@ -40,8 +40,8 @@ namespace ft {
             typedef typename allocator_type::const_pointer         const_pointer;
             typedef RBT_Iterator<value_type, value_compare>        iterator;
             typedef RBT_Iterator<value_type, const value_compare>  const_iterator;
-            typedef ft::reverse_iterator<const_iterator>               const_reverse_iterator;
-            typedef ft::reverse_iterator<iterator>                     reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>           const_reverse_iterator;
+            typedef ft::reverse_iterator<iterator>                 reverse_iterator;
             typedef iterator_traits<iterator>                      difference_type;
             typedef size_t                                         size_type;
 
@@ -205,6 +205,32 @@ namespace ft {
 
             value_compare value_comp() const {
                 return value_compare();
+            }
+
+            // operations
+            iterator find(const key_type& k) {
+                typename tree_type::Node *node;
+                value_type toFind(k, mapped_type());
+                node = _tree.findNode(toFind);
+                if (!node || node->isNull) {
+                    return iterator(_tree.end());
+                }
+                return iterator(node);
+            }
+
+            const_iterator find(const key_type& k) const {
+                typename tree_type::Node *node;
+                value_type toFind(k, mapped_type());
+                node = _tree.findNode(toFind);
+                if (!node || node->isNull) {
+                    return const_iterator(_tree.end());
+                }
+                return const_iterator(node);
+
+            }
+
+            size_type count(const key_type& k) const {
+                return find(k) != end();
             }
     };
 } // namespace ft
