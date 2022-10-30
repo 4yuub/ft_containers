@@ -71,7 +71,7 @@ namespace ft {
             typedef typename allocator_type::reference                  reference;
             typedef typename allocator_type::const_reference            const_reference;
             typedef VectorIterator<value_type>                          iterator;
-            typedef VectorIterator<const value_type>                    const_iterator;
+            typedef const VectorIterator<value_type>                    const_iterator;
             typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
             typedef ft::reverse_iterator<iterator>                      reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
