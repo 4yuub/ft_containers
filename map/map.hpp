@@ -258,6 +258,26 @@ namespace ft {
                 }
                 return const_iterator(node);
             }
+
+            iterator upper_bound(const key_type& k) {
+                typename tree_type::Node *node;
+                value_type toFind(k, mapped_type());
+                node = _tree.findNode(toFind);
+                if (!node)
+                    return iterator(_tree.end());
+                iterator it(node);
+                return ++it;
+            }
+            
+            const_iterator upper_bound(const key_type& k) const {
+                typename tree_type::Node *node;
+                value_type toFind(k, mapped_type());
+                node = _tree.findNode(toFind);
+                if (!node)
+                    return const_iterator(_tree.end());
+                const_iterator it(node);
+                return ++it;
+            }
     };
 } // namespace ft
 
