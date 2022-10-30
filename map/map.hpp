@@ -280,12 +280,17 @@ namespace ft {
             }
 
             pair<iterator,iterator> equal_range(const key_type& k) {
-                return make_pair(lower_bound(k), upper_bound(k));
+                return pair<iterator,iterator>(lower_bound(k), upper_bound(k));
             }
 
             pair<const_iterator,const_iterator> equal_range(const key_type& k) const {
-                return make_pair(lower_bound(k), upper_bound(k));
-            }        
+                return pair<const_iterator,const_iterator>(lower_bound(k), upper_bound(k));
+            }
+
+            // allocator
+            allocator_type get_allocator() const {
+                return allocator_type(_alloc);
+            }
     };
 } // namespace ft
 
